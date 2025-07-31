@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJDANN - Advanced Survival Prediction System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Section */
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .subtitle {
+            font-size: 1.3rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .header .version {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .how-it-works h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .step-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2rem;
+        }
+
+        .step h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .step p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Form Section */
+        .prediction-form {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-header h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group .help-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            min-width: 200px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results Section */
+        .results {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            display: none;
+        }
+
+        .results.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .results h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .result-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .result-unit {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .how-it-works, .prediction-form, .results {
+                padding: 25px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Error/Success Messages */
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message.error {
+            background: #fee;
+            color: #c53030;
+            border: 1px solid #feb2b2;
+        }
+
+        .message.success {
+            background: #f0fff4;
+            color: #2f855a;
+            border: 1px solid #9ae6b4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1><i class="fas fa-brain"></i> AJDANN</h1>
+            <div class="subtitle">Advanced Neural Network for Survival Prediction</div>
+            <div class="version">v6a - Enhanced Predictive Modeling</div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="how-it-works">
+            <h2><i class="fas fa-info-circle"></i> How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h3>Patient Data Input</h3>
+                    <p>Enter patient demographics and clinical parameters including age, gender, resection status, Karnofsky score, methylation status, and treatment history.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>AI Processing</h3>
+                    <p>Our trained neural network processes the input data using advanced machine learning algorithms to analyze survival patterns from historical clinical trials.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Survival Prediction</h3>
+                    <p>Get accurate predictions for median Progression-Free Survival (mPFS) and 6-month Progression-Free Survival (PFS6) based on the patient's profile.</p>
+                </div>
+            </div>
+            <div style="text-align: center; color: #666; font-style: italic;">
+                <p><strong>Note:</strong> This system uses data from historical Randomized Controlled Trials (RCTs) to provide evidence-based survival predictions.</p>
+            </div>
+        </div>
+
+        <!-- Prediction Form -->
+        <div class="prediction-form">
+            <div class="form-header">
+                <h2><i class="fas fa-calculator"></i> Survival Prediction Calculator</h2>
+                <p>Enter patient information to predict survival outcomes</p>
+            </div>
+
+            <form id="predictionForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="age">Age (years)</label>
+                        <input type="number" id="age" name="age" min="18" max="120" step="1" required>
+                        <div class="help-text">Patient's age in years</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="male">Gender</label>
+                        <select id="male" name="male" required>
+                            <option value="">Select gender</option>
+                            <option value="0">Female</option>
+                            <option value="1">Male</option>
+                        </select>
+                        <div class="help-text">Patient's biological gender</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resec">Resection Status (%)</label>
+                        <input type="number" id="resec" name="resec" min="0" max="100" step="1" required>
+                        <div class="help-text">Percentage of tumor resection achieved</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="k_score">Karnofsky Score (%)</label>
+                        <input type="number" id="k_score" name="k_score" min="0" max="100" step="1" required>
+                        <div class="help-text">Performance status score (0-100)</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="methyl">Methylation Status (%)</label>
+                        <input type="number" id="methyl" name="methyl" min="0" max="100" step="1" required>
+                        <div class="help-text">Methylation level percentage</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pre_trt_history">Pre-Treatment History</label>
+                        <select id="pre_trt_history" name="pre_trt_history" required>
+                            <option value="">Select history</option>
+                            <option value="1">None</option>
+                            <option value="2">Minimal</option>
+                            <option value="3">Moderate</option>
+                            <option value="4">Extensive</option>
+                        </select>
+                        <div class="help-text">Previous treatment history level</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <i class="fas fa-play"></i> Predict Survival
+                </button>
+            </form>
+        </div>
+
+        <!-- Loading Section -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing your data with our AI model...</p>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results" id="results">
+            <h2><i class="fas fa-chart-bar"></i> Prediction Results</h2>
+            <div class="results-grid">
+                <div class="result-card">
+                    <h3>Median Progression-Free Survival</h3>
+                    <div class="result-value" id="mpfsResult">-</div>
+                    <div class="result-unit">months</div>
+                </div>
+                <div class="result-card">
+                    <h3>6-Month Progression-Free Survival</h3>
+                    <div class="result-value" id="pfs6Result">-</div>
+                    <div class="result-unit">probability (%)</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="submit-btn" onclick="resetForm()" style="background: linear-gradient(135deg, #48bb78, #38a169);">
+                    <i class="fas fa-redo"></i> New Prediction
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8000';
+        
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            
+            // Show loading
+            submitBtn.disabled = true;
+            loading.classList.add('show');
+            results.classList.remove('show');
+            
+            // Clear previous messages
+            clearMessages();
+            
+            try {
+                // Get form data
+                const formData = new FormData(e.target);
+                const data = {
+                    age: parseFloat(formData.get('age')),
+                    male: parseInt(formData.get('male')),
+                    resec: parseFloat(formData.get('resec')),
+                    k_score: parseFloat(formData.get('k_score')),
+                    methyl: parseFloat(formData.get('methyl')),
+                    pre_trt_history: parseInt(formData.get('pre_trt_history'))
+                };
+                
+                // Validate data
+                if (Object.values(data).some(val => isNaN(val))) {
+                    throw new Error('Please fill in all fields with valid values');
+                }
+                
+                // Make API call
+                const response = await fetch(`${API_BASE_URL}/predict`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                
+                // Display results
+                document.getElementById('mpfsResult').textContent = result.mPFS;
+                document.getElementById('pfs6Result').textContent = result.PFS6;
+                
+                // Show results
+                results.classList.add('show');
+                
+                // Scroll to results
+                results.scrollIntoView({ behavior: 'smooth' });
+                
+            } catch (error) {
+                showMessage(error.message, 'error');
+            } finally {
+                // Hide loading
+                submitBtn.disabled = false;
+                loading.classList.remove('show');
+            }
+        });
+        
+        function showMessage(message, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(messageDiv, container.firstChild);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+        
+        function clearMessages() {
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(msg => msg.remove());
+        }
+        
+        function resetForm() {
+            document.getElementById('predictionForm').reset();
+            document.getElementById('results').classList.remove('show');
+            clearMessages();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Add some sample data buttons for testing
+        function addSampleDataButtons() {
+            const form = document.getElementById('predictionForm');
+            const sampleData = [
+                { name: 'Sample Case 1', data: { age: 75, male: 1, resec: 25, k_score: 30, methyl: 20, pre_trt_history: 4 } },
+                { name: 'Sample Case 2', data: { age: 55, male: 1, resec: 55, k_score: 60, methyl: 50, pre_trt_history: 3 } },
+                { name: 'Sample Case 3', data: { age: 35, male: 0, resec: 95, k_score: 95, methyl: 95, pre_trt_history: 1 } }
+            ];
+            
+            const sampleDiv = document.createElement('div');
+            sampleDiv.style.textAlign = 'center';
+            sampleDiv.style.marginTop = '20px';
+            sampleDiv.innerHTML = '<p style="color: #666; margin-bottom: 10px;">Quick test with sample data:</p>';
+            
+            sampleData.forEach((sample, index) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = sample.name;
+                btn.style.cssText = `
+                    background: linear-gradient(135deg, #48bb78, #38a169);
+                    color: white;
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: 5px;
+                    margin: 0 5px;
+                    cursor: pointer;
+                    font-size: 0.9rem;
+                `;
+                btn.onclick = () => fillFormWithData(sample.data);
+                sampleDiv.appendChild(btn);
+            });
+            
+            form.appendChild(sampleDiv);
+        }
+        
+        function fillFormWithData(data) {
+            document.getElementById('age').value = data.age;
+            document.getElementById('male').value = data.male;
+            document.getElementById('resec').value = data.resec;
+            document.getElementById('k_score').value = data.k_score;
+            document.getElementById('methyl').value = data.methyl;
+            document.getElementById('pre_trt_history').value = data.pre_trt_history;
+        }
+        
+        // Initialize sample data buttons
+        addSampleDataButtons();
+    </script>
+</body>
+</html> 

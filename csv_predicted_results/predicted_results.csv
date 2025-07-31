@@ -1,0 +1,4 @@
+Source,Treatment,N,mPFS,PFS6,age,male,resec,Kscore,methyl,pre_trt_history
+EX001,Model,0,27.186014,213.21774,75,1,25,30,20,4
+EX002,Model,0,21.014156,158.39784,55,1,55,60,50,3
+EX003,Model,0,32.095932,240.34099,35,0,95,95,95,1
