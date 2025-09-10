@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJDANN - Advanced Survival Prediction System</title>
+    <title>AJDANN v7a - Advanced Survival Prediction System</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -15,15 +15,48 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
             min-height: 100vh;
             color: #333;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+        }
+
+        /* Navigation */
+        .nav {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 15px 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #1e3a8a;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav a:hover, .nav a.active {
+            background: linear-gradient(135deg, #1e3a8a, #1e40af);
+            color: white;
+            transform: translateY(-2px);
         }
 
         /* Header Section */
@@ -56,89 +89,57 @@
             backdrop-filter: blur(10px);
         }
 
-        /* How It Works Section */
-        .how-it-works {
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .how-it-works h2 {
-            color: #667eea;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .step {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .step-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            color: white;
-            font-size: 2rem;
-        }
-
-        .step h3 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 1.2rem;
-        }
-
-        .step p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        /* Form Section */
-        .prediction-form {
+        /* Main Calculator Section */
+        .calculator-section {
             background: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 40px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
+            margin-bottom: 40px;
         }
 
-        .form-header {
+        .calculator-header {
             text-align: center;
             margin-bottom: 40px;
         }
 
-        .form-header h2 {
-            color: #667eea;
-            font-size: 2rem;
-            margin-bottom: 10px;
+        .calculator-header h2 {
+            color: #1e3a8a;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
         }
 
-        .form-header p {
+        .calculator-header p {
             color: #666;
             font-size: 1.1rem;
         }
 
+        .calculator-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Left Side - Inputs */
+        .input-section {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(30, 64, 175, 0.05));
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(30, 58, 138, 0.2);
+        }
+
+        .input-section h3 {
+            color: #1e3a8a;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
+            gap: 20px;
         }
 
         .form-group {
@@ -164,8 +165,8 @@
 
         .form-group input:focus, .form-group select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #1e3a8a;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
         }
 
         .form-group .help-text {
@@ -174,8 +175,42 @@
             margin-top: 5px;
         }
 
+        .sample-cases {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .sample-cases h4 {
+            color: #1e3a8a;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .sample-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .sample-btn {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .sample-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3);
+        }
+
         .submit-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
             color: white;
             border: none;
             padding: 15px 40px;
@@ -185,13 +220,13 @@
             cursor: pointer;
             transition: all 0.3s ease;
             display: block;
-            margin: 0 auto;
+            margin: 30px auto 0;
             min-width: 200px;
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
         }
 
         .submit-btn:disabled {
@@ -200,18 +235,107 @@
             transform: none;
         }
 
-        /* Results Section */
-        .results {
+        /* Right Side - Outputs */
+        .output-section {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(30, 64, 175, 0.05));
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(30, 58, 138, 0.2);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .output-section h3 {
+            color: #1e3a8a;
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .output-placeholder {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        .output-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .results-grid {
+            display: grid;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .result-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .result-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .result-unit {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .insights {
+            background: rgba(255,255,255,0.9);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #8b5cf6;
+        }
+
+        .insights h4 {
+            color: #8b5cf6;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .insight-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px 0;
+        }
+
+        .insight-item i {
+            color: #48bb78;
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
             background: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 40px;
-            margin-top: 40px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
             display: none;
         }
 
-        .results.show {
+        .how-it-works.show {
             display: block;
             animation: slideIn 0.5s ease;
         }
@@ -227,46 +351,85 @@
             }
         }
 
-        .results h2 {
-            color: #667eea;
+        .how-it-works h2 {
+            color: #1e3a8a;
             font-size: 2rem;
             margin-bottom: 30px;
             text-align: center;
         }
 
-        .results-grid {
+        .steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 30px;
             margin-bottom: 30px;
         }
 
-        .result-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+        .step {
+            position: relative;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,249,255,0.98));
+            border: 1px solid rgba(30, 58, 138, 0.25);
+            border-radius: 16px;
+            padding: 24px 22px;
+            text-align: left;
+            box-shadow: 0 12px 24px rgba(30, 58, 138, 0.12);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .step::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            background: linear-gradient(90deg, #1e3a8a, #1e40af);
+        }
+
+        .step:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 32px rgba(30, 58, 138, 0.22);
+        }
+
+        .step-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #1e3a8a, #1e40af);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0 14px 0;
             color: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            font-size: 1.6rem;
+            box-shadow: 0 8px 16px rgba(30, 58, 138, 0.35);
         }
 
-        .result-card h3 {
-            font-size: 1.2rem;
+        .step h3 {
+            color: #2d2d2d;
             margin-bottom: 10px;
-            opacity: 0.9;
+            font-size: 1.15rem;
+            font-weight: 600;
         }
 
-        .result-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 5px;
+        .step p {
+            color: #5f6c7b;
+            line-height: 1.6;
         }
 
-        .result-unit {
-            font-size: 0.9rem;
-            opacity: 0.8;
+        .how-note {
+            text-align: center;
+            color: #4a5568;
+            font-style: italic;
+            background: rgba(30, 58, 138, 0.08);
+            border: 1px dashed rgba(30, 58, 138, 0.35);
+            padding: 12px 16px;
+            border-radius: 12px;
         }
 
+        /* Loading Section */
         .loading {
             display: none;
             text-align: center;
@@ -279,7 +442,7 @@
 
         .spinner {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border-top: 4px solid #1e3a8a;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -293,6 +456,13 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            .calculator-layout {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2.5rem;
@@ -302,12 +472,14 @@
                 padding: 15px;
             }
             
-            .how-it-works, .prediction-form, .results {
+            .calculator-section, .how-it-works {
                 padding: 25px;
             }
             
-            .form-grid {
-                grid-template-columns: 1fr;
+            .nav ul {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
             }
         }
 
@@ -335,15 +507,151 @@
 </head>
 <body>
     <div class="container">
+        <!-- Navigation -->
+        <nav class="nav">
+            <ul>
+                <li><a href="#" class="nav-link active" data-section="calculator">Calculator</a></li>
+                <li><a href="#" class="nav-link" data-section="how-it-works">How It Works</a></li>
+            </ul>
+        </nav>
+
         <!-- Header Section -->
         <div class="header">
             <h1><i class="fas fa-brain"></i> AJDANN</h1>
-            <div class="subtitle">Advanced Neural Network for Survival Prediction</div>
-            <div class="version">v6a - Enhanced Predictive Modeling</div>
+            <div class="subtitle">Survival Prediction using Advanced Neural Network for Single-Arm Trials</div>
+            <div class="version">v7a - Enhanced Multi-Task Predictive Modeling</div>
+        </div>
+
+        <!-- Main Calculator Section -->
+        <div class="calculator-section" id="calculator-section">
+            <div class="calculator-header">
+                <h2><i class="fas fa-calculator"></i> Survival Prediction Calculator</h2>
+                <p>Enter patient information to predict survival outcomes</p>
+            </div>
+
+            <div class="calculator-layout">
+                <!-- Left Side - Inputs -->
+                <div class="input-section">
+                    <h3><i class="fas fa-edit"></i> Patient Data Input</h3>
+                    <form id="predictionForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="age">Age (years)</label>
+                                <input type="number" id="age" name="age" min="18" max="120" step="1" required>
+                                <div class="help-text">Patient's age in years</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="male">Gender</label>
+                                <select id="male" name="male" required>
+                                    <option value="">Select gender</option>
+                                    <option value="0">Female</option>
+                                    <option value="1">Male</option>
+                                </select>
+                                <div class="help-text">Patient's biological gender</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="resec">Resection Status (%)</label>
+                                <input type="number" id="resec" name="resec" min="0" max="100" step="1" required>
+                                <div class="help-text">Percentage of tumor resection achieved</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="k_score">Karnofsky Score (%)</label>
+                                <input type="number" id="k_score" name="k_score" min="0" max="100" step="1" required>
+                                <div class="help-text">Performance status score (0-100)</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="methyl">Methylation Status (%)</label>
+                                <input type="number" id="methyl" name="methyl" min="0" max="100" step="1" required>
+                                <div class="help-text">Methylation level percentage</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pre_trt_history">Pre-Treatment History</label>
+                                <select id="pre_trt_history" name="pre_trt_history" required>
+                                    <option value="">Select history</option>
+                                    <option value="1">None</option>
+                                    <option value="2">Minimal</option>
+                                    <option value="3">Moderate</option>
+                                    <option value="4">Extensive</option>
+                                </select>
+                                <div class="help-text">Previous treatment history level</div>
+                            </div>
+                        </div>
+
+                        <div class="sample-cases">
+                            <h4><i class="fas fa-flask"></i> Quick Test Cases</h4>
+                            <div class="sample-buttons">
+                                <button type="button" class="sample-btn" onclick="fillFormWithData('case1')">Case 1</button>
+                                <button type="button" class="sample-btn" onclick="fillFormWithData('case2')">Case 2</button>
+                                <button type="button" class="sample-btn" onclick="fillFormWithData('case3')">Case 3</button>
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <button type="button" class="sample-btn" onclick="debugCurrentCase()" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                                    <i class="fas fa-bug"></i> Debug Current Case
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn" id="submitBtn">
+                            <i class="fas fa-play"></i> Predict Survival
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right Side - Outputs -->
+                <div class="output-section">
+                    <h3><i class="fas fa-chart-line"></i> Prediction Results</h3>
+                    <div class="output-placeholder" id="outputPlaceholder">
+                        <i class="fas fa-chart-bar"></i>
+                        <p>Enter patient data and click "Predict Survival" to see results</p>
+                    </div>
+                    
+                    <div class="results-content" id="resultsContent" style="display: none;">
+                        <div class="results-grid">
+                            <div class="result-card">
+                                <h4>Median Progression-Free Survival</h4>
+                                <div class="result-value" id="mpfsResult">-</div>
+                                <div class="result-unit">months</div>
+                            </div>
+                            <div class="result-card">
+                                <h4>6-Month Progression-Free Survival</h4>
+                                <div class="result-value" id="pfs6Result">-</div>
+                                <div class="result-unit">probability (%)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="insights" id="insights">
+                            <h4><i class="fas fa-lightbulb"></i> Key Insights</h4>
+                            <div id="insightsContent">
+                                <!-- Insights will be populated here -->
+                            </div>
+                            <div id="calibrationInfo" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 0.9rem; color: #666;">
+                                <!-- Calibration info will be shown here -->
+                            </div>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 30px;">
+                            <button class="submit-btn" onclick="resetForm()" style="background: linear-gradient(135deg, #48bb78, #38a169);">
+                                <i class="fas fa-redo"></i> New Prediction
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Section -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Processing your data with our AI model...</p>
         </div>
 
         <!-- How It Works Section -->
-        <div class="how-it-works">
+        <div class="how-it-works" id="how-it-works-section">
             <h2><i class="fas fa-info-circle"></i> How It Works</h2>
             <div class="steps">
                 <div class="step">
@@ -368,116 +676,69 @@
                     <p>Get accurate predictions for median Progression-Free Survival (mPFS) and 6-month Progression-Free Survival (PFS6) based on the patient's profile.</p>
                 </div>
             </div>
-            <div style="text-align: center; color: #666; font-style: italic;">
+            <div class="how-note">
                 <p><strong>Note:</strong> This system uses data from historical Randomized Controlled Trials (RCTs) to provide evidence-based survival predictions.</p>
-            </div>
-        </div>
-
-        <!-- Prediction Form -->
-        <div class="prediction-form">
-            <div class="form-header">
-                <h2><i class="fas fa-calculator"></i> Survival Prediction Calculator</h2>
-                <p>Enter patient information to predict survival outcomes</p>
-            </div>
-
-            <form id="predictionForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="age">Age (years)</label>
-                        <input type="number" id="age" name="age" min="18" max="120" step="1" required>
-                        <div class="help-text">Patient's age in years</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="male">Gender</label>
-                        <select id="male" name="male" required>
-                            <option value="">Select gender</option>
-                            <option value="0">Female</option>
-                            <option value="1">Male</option>
-                        </select>
-                        <div class="help-text">Patient's biological gender</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="resec">Resection Status (%)</label>
-                        <input type="number" id="resec" name="resec" min="0" max="100" step="1" required>
-                        <div class="help-text">Percentage of tumor resection achieved</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="k_score">Karnofsky Score (%)</label>
-                        <input type="number" id="k_score" name="k_score" min="0" max="100" step="1" required>
-                        <div class="help-text">Performance status score (0-100)</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="methyl">Methylation Status (%)</label>
-                        <input type="number" id="methyl" name="methyl" min="0" max="100" step="1" required>
-                        <div class="help-text">Methylation level percentage</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="pre_trt_history">Pre-Treatment History</label>
-                        <select id="pre_trt_history" name="pre_trt_history" required>
-                            <option value="">Select history</option>
-                            <option value="1">None</option>
-                            <option value="2">Minimal</option>
-                            <option value="3">Moderate</option>
-                            <option value="4">Extensive</option>
-                        </select>
-                        <div class="help-text">Previous treatment history level</div>
-                    </div>
-                </div>
-
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <i class="fas fa-play"></i> Predict Survival
-                </button>
-            </form>
-        </div>
-
-        <!-- Loading Section -->
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Processing your data with our AI model...</p>
-        </div>
-
-        <!-- Results Section -->
-        <div class="results" id="results">
-            <h2><i class="fas fa-chart-bar"></i> Prediction Results</h2>
-            <div class="results-grid">
-                <div class="result-card">
-                    <h3>Median Progression-Free Survival</h3>
-                    <div class="result-value" id="mpfsResult">-</div>
-                    <div class="result-unit">months</div>
-                </div>
-                <div class="result-card">
-                    <h3>6-Month Progression-Free Survival</h3>
-                    <div class="result-value" id="pfs6Result">-</div>
-                    <div class="result-unit">probability (%)</div>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: 30px;">
-                <button class="submit-btn" onclick="resetForm()" style="background: linear-gradient(135deg, #48bb78, #38a169);">
-                    <i class="fas fa-redo"></i> New Prediction
-                </button>
             </div>
         </div>
     </div>
 
     <script>
-        const API_BASE_URL = 'http://localhost:8000';
+        const API_BASE_URL = '';
         
+        // Navigation functionality
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Show/hide sections
+                const section = this.getAttribute('data-section');
+                if (section === 'calculator') {
+                    document.getElementById('calculator-section').style.display = 'block';
+                    document.getElementById('how-it-works-section').classList.remove('show');
+                } else if (section === 'how-it-works') {
+                    document.getElementById('calculator-section').style.display = 'none';
+                    document.getElementById('how-it-works-section').classList.add('show');
+                }
+            });
+        });
+        
+        // Sample data cases
+        const sampleCases = {
+            case1: { age: 75, male: 1, resec: 25, k_score: 30, methyl: 20, pre_trt_history: 4 },
+            case2: { age: 55, male: 1, resec: 55, k_score: 60, methyl: 50, pre_trt_history: 3 },
+            case3: { age: 35, male: 0, resec: 95, k_score: 95, methyl: 95, pre_trt_history: 1 }
+        };
+        
+        function fillFormWithData(caseKey) {
+            const data = sampleCases[caseKey];
+            document.getElementById('age').value = data.age;
+            document.getElementById('male').value = data.male;
+            document.getElementById('resec').value = data.resec;
+            document.getElementById('k_score').value = data.k_score;
+            document.getElementById('methyl').value = data.methyl;
+            document.getElementById('pre_trt_history').value = data.pre_trt_history;
+        }
+        
+        // Form submission
         document.getElementById('predictionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const submitBtn = document.getElementById('submitBtn');
             const loading = document.getElementById('loading');
-            const results = document.getElementById('results');
+            const outputPlaceholder = document.getElementById('outputPlaceholder');
+            const resultsContent = document.getElementById('resultsContent');
             
             // Show loading
             submitBtn.disabled = true;
             loading.classList.add('show');
-            results.classList.remove('show');
+            outputPlaceholder.style.display = 'none';
+            resultsContent.style.display = 'none';
             
             // Clear previous messages
             clearMessages();
@@ -518,20 +779,93 @@
                 document.getElementById('mpfsResult').textContent = result.mPFS;
                 document.getElementById('pfs6Result').textContent = result.PFS6;
                 
-                // Show results
-                results.classList.add('show');
+                // Generate insights
+                generateInsights(data, result);
                 
-                // Scroll to results
-                results.scrollIntoView({ behavior: 'smooth' });
+                // Show results
+                resultsContent.style.display = 'block';
                 
             } catch (error) {
                 showMessage(error.message, 'error');
+                // Show placeholder again on error
+                outputPlaceholder.style.display = 'block';
             } finally {
                 // Hide loading
                 submitBtn.disabled = false;
                 loading.classList.remove('show');
             }
         });
+        
+        function generateInsights(inputData, results) {
+            const insightsContent = document.getElementById('insightsContent');
+            const calibrationInfo = document.getElementById('calibrationInfo');
+            let insights = [];
+            
+            // Age-based insights
+            if (inputData.age > 70) {
+                insights.push('Patient is in the elderly age group, which may influence treatment decisions');
+            } else if (inputData.age < 40) {
+                insights.push('Young patient with potentially better treatment tolerance');
+            }
+            
+            // Karnofsky score insights
+            if (inputData.k_score < 50) {
+                insights.push('Low performance status suggests need for supportive care');
+            } else if (inputData.k_score > 80) {
+                insights.push('Good performance status indicates potential for aggressive treatment');
+            }
+            
+            // Resection insights
+            if (inputData.resec < 50) {
+                insights.push('Subtotal resection may require additional treatment modalities');
+            } else if (inputData.resec > 90) {
+                insights.push('Near-total resection suggests favorable prognosis');
+            }
+            
+            // Methylation insights
+            if (inputData.methyl < 30) {
+                insights.push('Low methylation status may indicate different treatment response');
+            }
+            
+            // Survival prediction insights
+            if (results.mPFS < 6) {
+                insights.push('Short predicted survival suggests need for aggressive treatment');
+            } else if (results.mPFS > 12) {
+                insights.push('Favorable survival prediction with current treatment approach');
+            }
+            
+            if (results.PFS6 < 50) {
+                insights.push('Low 6-month survival probability indicates high-risk case');
+            } else if (results.PFS6 > 80) {
+                insights.push('High 6-month survival probability suggests good prognosis');
+            }
+            
+            // Display insights
+            insightsContent.innerHTML = insights.map(insight => 
+                `<div class="insight-item"><i class="fas fa-check-circle"></i>${insight}</div>`
+            ).join('');
+            
+            // Display calibration information if available
+            if (results.calibrated && results.raw_pfs6_prob !== undefined) {
+                const rawPercent = (results.raw_pfs6_prob * 100).toFixed(1);
+                const calibratedPercent = results.PFS6;
+                const adjustment = ((calibratedPercent - rawPercent) / rawPercent * 100).toFixed(1);
+                
+                calibrationInfo.innerHTML = `
+                    <div style="color: #8b5cf6; font-weight: 600; margin-bottom: 8px;">
+                        <i class="fas fa-adjust"></i> Model Calibration Applied
+                    </div>
+                    <div style="margin-bottom: 5px;">
+                        <strong>Raw prediction:</strong> ${rawPercent}% → <strong>Calibrated:</strong> ${calibratedPercent}%
+                    </div>
+                    <div style="font-style: italic; color: #888;">
+                        Adjusted by ${Math.abs(adjustment)}% based on clinical factors (age, performance status, resection)
+                    </div>
+                `;
+            } else {
+                calibrationInfo.innerHTML = '';
+            }
+        }
         
         function showMessage(message, type) {
             const messageDiv = document.createElement('div');
@@ -554,59 +888,66 @@
         
         function resetForm() {
             document.getElementById('predictionForm').reset();
-            document.getElementById('results').classList.remove('show');
+            document.getElementById('outputPlaceholder').style.display = 'block';
+            document.getElementById('resultsContent').style.display = 'none';
             clearMessages();
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-        // Add some sample data buttons for testing
-        function addSampleDataButtons() {
+        async function debugCurrentCase() {
             const form = document.getElementById('predictionForm');
-            const sampleData = [
-                { name: 'Sample Case 1', data: { age: 75, male: 1, resec: 25, k_score: 30, methyl: 20, pre_trt_history: 4 } },
-                { name: 'Sample Case 2', data: { age: 55, male: 1, resec: 55, k_score: 60, methyl: 50, pre_trt_history: 3 } },
-                { name: 'Sample Case 3', data: { age: 35, male: 0, resec: 95, k_score: 95, methyl: 95, pre_trt_history: 1 } }
-            ];
+            const formData = new FormData(form);
             
-            const sampleDiv = document.createElement('div');
-            sampleDiv.style.textAlign = 'center';
-            sampleDiv.style.marginTop = '20px';
-            sampleDiv.innerHTML = '<p style="color: #666; margin-bottom: 10px;">Quick test with sample data:</p>';
-            
-            sampleData.forEach((sample, index) => {
-                const btn = document.createElement('button');
-                btn.type = 'button';
-                btn.textContent = sample.name;
-                btn.style.cssText = `
-                    background: linear-gradient(135deg, #48bb78, #38a169);
-                    color: white;
-                    border: none;
-                    padding: 8px 16px;
-                    border-radius: 5px;
-                    margin: 0 5px;
-                    cursor: pointer;
-                    font-size: 0.9rem;
+            try {
+                const data = {
+                    age: parseFloat(formData.get('age')),
+                    male: parseInt(formData.get('male')),
+                    resec: parseFloat(formData.get('resec')),
+                    k_score: parseFloat(formData.get('k_score')),
+                    methyl: parseFloat(formData.get('methyl')),
+                    pre_trt_history: parseInt(formData.get('pre_trt_history'))
+                };
+                
+                if (Object.values(data).some(val => isNaN(val))) {
+                    showMessage('Please fill in all fields before debugging', 'error');
+                    return;
+                }
+                
+                const response = await fetch(`${API_BASE_URL}/debug-predict`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+                
+                const debugResult = await response.json();
+                
+                // Show debug results in a formatted way
+                const debugInfo = `
+                    <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-top: 15px;">
+                        <h5 style="color: #f39c12; margin-bottom: 10px;"><i class="fas fa-bug"></i> Debug Information</h5>
+                        <div style="font-family: monospace; font-size: 0.9rem;">
+                            <div><strong>Raw PFS6:</strong> ${debugResult.raw_predictions.PFS6_percentage}%</div>
+                            <div><strong>Calibrated PFS6:</strong> ${debugResult.calibrated_predictions.PFS6_percentage}%</div>
+                            <div><strong>Age Group:</strong> ${debugResult.calibration_factors.age_group}</div>
+                            <div><strong>Performance:</strong> ${debugResult.calibration_factors.performance_status}</div>
+                            <div><strong>Resection:</strong> ${debugResult.calibration_factors.resection_quality}</div>
+                        </div>
+                    </div>
                 `;
-                btn.onclick = () => fillFormWithData(sample.data);
-                sampleDiv.appendChild(btn);
-            });
-            
-            form.appendChild(sampleDiv);
+                
+                // Add debug info to the insights section
+                const insightsContent = document.getElementById('insightsContent');
+                insightsContent.insertAdjacentHTML('beforeend', debugInfo);
+                
+            } catch (error) {
+                showMessage(`Debug failed: ${error.message}`, 'error');
+            }
         }
-        
-        function fillFormWithData(data) {
-            document.getElementById('age').value = data.age;
-            document.getElementById('male').value = data.male;
-            document.getElementById('resec').value = data.resec;
-            document.getElementById('k_score').value = data.k_score;
-            document.getElementById('methyl').value = data.methyl;
-            document.getElementById('pre_trt_history').value = data.pre_trt_history;
-        }
-        
-        // Initialize sample data buttons
-        addSampleDataButtons();
     </script>
 </body>
-</html> 
+</html>

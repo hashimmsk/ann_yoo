@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Environments & IDE
+.venv/
+.venv1/
+env/
+venv/
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build / artifacts / data
+rmse_graphs/
+rmse_tables/
+csv_predicted_results/
+
+# Old/unused models (keep v7a only)
+saved_models/
+saved_models_v6a/
+
+# Logs
+*.log
+
+# Node (if any tooling)
+node_modules/
+
