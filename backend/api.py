@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 import os
+from pathlib import Path
 import numpy as np
 import joblib
 import tensorflow as tf
@@ -13,26 +14,32 @@ model = None
 scaler = None
 active_version = "unknown"
 
+ROOT_DIR = Path(__file__).resolve().parent.parent
+MODEL_DIR = ROOT_DIR / "models"
+V7_MODEL_DIR = MODEL_DIR / "saved_models_v7a"
+LEGACY_V6_DIR = MODEL_DIR / "saved_models_v6a"
+LEGACY_BASELINE_DIR = ROOT_DIR / "saved_models"
+
 try:
     # Try to load v7a model first
-    model = tf.keras.models.load_model("saved_models_v7a/ajdANN_v7a_model.keras")
-    scaler = joblib.load("saved_models_v7a/scaler.pkl")
+    model = tf.keras.models.load_model(str(V7_MODEL_DIR / "ajdANN_v7a_model.keras"))
+    scaler = joblib.load(str(V7_MODEL_DIR / "scaler.pkl"))
     active_version = "v7a"
     print("✅ Loaded ADJANN v7a model successfully")
 except Exception as v7_error:
     print(f"⚠️  v7a model loading failed: {v7_error}")
     try:
         # Fallback to v6a
-        model = tf.keras.models.load_model("saved_models_v6a/ajdANN_v6a_model.keras")
-        scaler = joblib.load("saved_models_v6a/scaler.pkl")
+        model = tf.keras.models.load_model(str(LEGACY_V6_DIR / "ajdANN_v6a_model.keras"))
+        scaler = joblib.load(str(LEGACY_V6_DIR / "scaler.pkl"))
         active_version = "v6a"
         print("✅ Loaded ADJANN v6a model as fallback")
     except Exception as v6_error:
         print(f"⚠️  v6a model loading failed: {v6_error}")
         try:
             # Final fallback to baseline models
-            model = tf.keras.models.load_model("saved_models/baseline_model.h5")
-            scaler = joblib.load("saved_models/scaler.pkl")
+            model = tf.keras.models.load_model(str(LEGACY_BASELINE_DIR / "baseline_model.h5"))
+            scaler = joblib.load(str(LEGACY_BASELINE_DIR / "scaler.pkl"))
             active_version = "baseline"
             print("✅ Loaded baseline model as final fallback")
         except Exception as baseline_error:
@@ -117,14 +124,15 @@ class InputData(BaseModel):
     pre_trt_history: int  # pre-treatment history
 
 # Mount static files directory
-if not os.path.exists("static"):
-    os.makedirs("static")
+FRONTEND_DIR = ROOT_DIR / "frontend"
+STATIC_DIR = FRONTEND_DIR / "static"
+STATIC_DIR.mkdir(parents=True, exist_ok=True)
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 @app.get("/")
 def read_root():
-    return FileResponse("index.html")
+    return FileResponse(str(FRONTEND_DIR / "index.html"))
 
 @app.get("/api/status")
 def api_status():

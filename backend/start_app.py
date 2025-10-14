@@ -8,29 +8,34 @@ import os
 import sys
 import subprocess
 import time
-from flask import Flask, render_template, send_from_directory
+from pathlib import Path
+from flask import Flask, send_from_directory
 import threading
 import uvicorn
 from api import app as fastapi_app
 
+ROOT_DIR = Path(__file__).resolve().parent.parent
+FRONTEND_DIR = ROOT_DIR / "frontend"
+MODELS_DIR = ROOT_DIR / "models"
+
 # Create Flask app
 flask_app = Flask(__name__, 
-                 static_folder='static',
-                 template_folder='.')
+                 static_folder=str(FRONTEND_DIR / "static"),
+                 template_folder=str(FRONTEND_DIR))
 
 # Routes for HTML pages
 @flask_app.route('/')
 @flask_app.route('/index.html')
 def index():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory(str(FRONTEND_DIR), 'index.html')
 
 @flask_app.route('/about.html')
 def about():
-    return send_from_directory('.', 'about.html')
+    return send_from_directory(str(FRONTEND_DIR), 'about.html')
 
 @flask_app.route('/contact.html')
 def contact():
-    return send_from_directory('.', 'contact.html')
+    return send_from_directory(str(FRONTEND_DIR), 'contact.html')
 
 def check_dependencies():
     """Check if required dependencies are installed"""
@@ -58,7 +63,9 @@ def train_model():
     print("🚀 Training ADJANN v7a model...")
     try:
         # Train v7a model
+        sys.path.insert(0, str(ROOT_DIR / "models"))
         import ajdANN_v7a  # noqa: F401
+        sys.path.pop(0)
         print("✅ v7a model training completed successfully")
         return True
     except Exception as e:
@@ -73,7 +80,7 @@ def check_model_quality():
         import numpy as np
         
         # Load the model
-        model = tf.keras.models.load_model("saved_models_v7a/ajdANN_v7a_model.keras")
+        model = tf.keras.models.load_model(str(MODELS_DIR / "saved_models_v7a" / "ajdANN_v7a_model.keras"))
         
         # Test with Case 1 (should produce ~40% PFS6)
         test_case = np.array([[75, 1, 25, 30, 20, 4]])
@@ -104,7 +111,7 @@ def main():
         return
     
     # Check if v7a model exists and is of good quality
-    if os.path.exists("saved_models_v7a"):
+    if (MODELS_DIR / "saved_models_v7a").exists():
         print("✅ v7a model directory exists")
         if check_model_quality():
             print("✅ Model quality check passed")

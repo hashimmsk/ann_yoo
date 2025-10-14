@@ -24,7 +24,7 @@ python retrain_v7a.py
 ```
 
 This script will:
-- Backup your existing model to `saved_models_v7a_backup`
+- Backup your existing model to `models/saved_models_v7a_backup`
 - Retrain the model with **temperature scaling** (temperature=2.0)
 - Use **adaptive thresholding** based on data distribution
 - Apply **conservative PFS6 processing**
@@ -97,10 +97,10 @@ def build_multitask_model(input_dim: int, learning_rate: float = 1e-3, temperatu
 ### If you need to restore the old model:
 ```bash
 # Remove the new model
-rm -rf saved_models_v7a
+rm -rf models/saved_models_v7a
 
 # Restore the backup
-mv saved_models_v7a_backup saved_models_v7a
+mv models/saved_models_v7a_backup models/saved_models_v7a
 ```
 
 ## Technical Details
