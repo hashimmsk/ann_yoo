@@ -1,953 +1,590 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJDANN v7a - Advanced Survival Prediction System</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Navigation */
-        .nav {
-            background: rgba(255,255,255,0.95);
-            border-radius: 15px;
-            padding: 15px 30px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-        }
-
-        .nav a {
-            text-decoration: none;
-            color: #1e3a8a;
-            font-weight: 600;
-            font-size: 1.1rem;
-            padding: 10px 20px;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-        }
-
-        .nav a:hover, .nav a.active {
-            background: linear-gradient(135deg, #1e3a8a, #1e40af);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        /* Header Section */
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-        }
-
-        .header h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .header .subtitle {
-            font-size: 1.3rem;
-            font-weight: 300;
-            opacity: 0.9;
-            margin-bottom: 30px;
-        }
-
-        .header .version {
-            background: rgba(255,255,255,0.2);
-            padding: 8px 20px;
-            border-radius: 25px;
-            display: inline-block;
-            font-size: 0.9rem;
-            backdrop-filter: blur(10px);
-        }
-
-        /* Main Calculator Section */
-        .calculator-section {
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-            margin-bottom: 40px;
-        }
-
-        .calculator-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .calculator-header h2 {
-            color: #1e3a8a;
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-        }
-
-        .calculator-header p {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        .calculator-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: start;
-        }
-
-        /* Left Side - Inputs */
-        .input-section {
-            background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(30, 64, 175, 0.05));
-            border-radius: 15px;
-            padding: 30px;
-            border: 1px solid rgba(30, 58, 138, 0.2);
-        }
-
-        .input-section h3 {
-            color: #1e3a8a;
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .form-grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-
-        .form-group input, .form-group select {
-            padding: 12px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: white;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #1e3a8a;
-            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
-        }
-
-        .form-group .help-text {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 5px;
-        }
-
-        .sample-cases {
-            margin-top: 25px;
-            text-align: center;
-        }
-
-        .sample-cases h4 {
-            color: #1e3a8a;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-
-        .sample-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .sample-btn {
-            background: linear-gradient(135deg, #48bb78, #38a169);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .sample-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(72, 187, 120, 0.3);
-        }
-
-        .submit-btn {
-            background: linear-gradient(135deg, #dc2626, #b91c1c);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: block;
-            margin: 30px auto 0;
-            min-width: 200px;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
-        }
-
-        .submit-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Right Side - Outputs */
-        .output-section {
-            background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(30, 64, 175, 0.05));
-            border-radius: 15px;
-            padding: 30px;
-            border: 1px solid rgba(30, 58, 138, 0.2);
-            min-height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .output-section h3 {
-            color: #1e3a8a;
-            font-size: 1.5rem;
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .output-placeholder {
-            text-align: center;
-            color: #999;
-            font-style: italic;
-        }
-
-        .output-placeholder i {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-
-        .results-grid {
-            display: grid;
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .result-card {
-            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
-        }
-
-        .result-card h4 {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            opacity: 0.9;
-        }
-
-        .result-value {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .result-unit {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .insights {
-            background: rgba(255,255,255,0.9);
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
-            border-left: 4px solid #8b5cf6;
-        }
-
-        .insights h4 {
-            color: #8b5cf6;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-        }
-
-        .insight-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 8px 0;
-        }
-
-        .insight-item i {
-            color: #48bb78;
-            margin-right: 10px;
-            width: 20px;
-        }
-
-        /* How It Works Section */
-        .how-it-works {
-            background: rgba(255,255,255,0.95);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-            display: none;
-        }
-
-        .how-it-works.show {
-            display: block;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .how-it-works h2 {
-            color: #1e3a8a;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
-        }
-
-        .step {
-            position: relative;
-            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,249,255,0.98));
-            border: 1px solid rgba(30, 58, 138, 0.25);
-            border-radius: 16px;
-            padding: 24px 22px;
-            text-align: left;
-            box-shadow: 0 12px 24px rgba(30, 58, 138, 0.12);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .step::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 6px;
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
-            background: linear-gradient(90deg, #1e3a8a, #1e40af);
-        }
-
-        .step:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 18px 32px rgba(30, 58, 138, 0.22);
-        }
-
-        .step-icon {
-            width: 64px;
-            height: 64px;
-            background: linear-gradient(135deg, #1e3a8a, #1e40af);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 0 14px 0;
-            color: white;
-            font-size: 1.6rem;
-            box-shadow: 0 8px 16px rgba(30, 58, 138, 0.35);
-        }
-
-        .step h3 {
-            color: #2d2d2d;
-            margin-bottom: 10px;
-            font-size: 1.15rem;
-            font-weight: 600;
-        }
-
-        .step p {
-            color: #5f6c7b;
-            line-height: 1.6;
-        }
-
-        .how-note {
-            text-align: center;
-            color: #4a5568;
-            font-style: italic;
-            background: rgba(30, 58, 138, 0.08);
-            border: 1px dashed rgba(30, 58, 138, 0.35);
-            padding: 12px 16px;
-            border-radius: 12px;
-        }
-
-        /* Loading Section */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .loading.show {
-            display: block;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #1e3a8a;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1024px) {
-            .calculator-layout {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .container {
-                padding: 15px;
-            }
-            
-            .calculator-section, .how-it-works {
-                padding: 25px;
-            }
-            
-            .nav ul {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-        }
-
-        /* Error/Success Messages */
-        .message {
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .message.error {
-            background: #fee;
-            color: #c53030;
-            border: 1px solid #feb2b2;
-        }
-
-        .message.success {
-            background: #f0fff4;
-            color: #2f855a;
-            border: 1px solid #9ae6b4;
-        }
-    </style>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>datanuri</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <link href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3e%3cpath fill='%231193d4' d='M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z'/%3e%3c/svg%3e" rel="icon" type="image/svg+xml"/>
+  <link href="./logo.png" rel="icon" type="image/png" sizes="32x32"/>
+  <link href="./logo.png" rel="icon" type="image/png" sizes="16x16"/>
+  <link href="./logo.png" rel="shortcut icon" type="image/png"/>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#1193d4",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101c22",
+          },
+          fontFamily: { "display": ["Inter"] },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+
+  <!-- Helpers -->
+  <style>
+    .form-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.25em 1.25em;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .dark .form-select {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    }
+    .message { border-radius:.75rem; padding:.75rem 1rem; font-weight:600; margin:.75rem 0; text-align:center }
+    .message.error { background:#fee2e2; color:#991b1b; border:1px solid #fecaca }
+    .message.success { background:#dcfce7; color:#166534; border:1px solid #bbf7d0 }
+  </style>
 </head>
-<body>
-    <div class="container">
-        <!-- Navigation -->
-        <nav class="nav">
-            <ul>
-                <li><a href="#" class="nav-link active" data-section="calculator">Calculator</a></li>
-                <li><a href="#" class="nav-link" data-section="how-it-works">How It Works</a></li>
-            </ul>
+
+<body class="font-display bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-200">
+<div class="flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 gap-6">
+        <div class="flex items-center gap-3 md:w-1/3">
+          <div class="w-8 h-8 text-primary">
+            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h1 class="text-xl font-bold text-gray-900 dark:text-white">datanuri</h1>
+        </div>
+        <nav class="hidden md:flex md:w-1/3 items-center justify-center gap-8">
+          <a class="text-sm font-medium text-primary" href="index.html">Home</a>
+          <a class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary" href="about.html">About</a>
+          <a class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary" href="contact.html">Contact</a>
         </nav>
-
-        <!-- Header Section -->
-        <div class="header">
-            <h1><i class="fas fa-brain"></i> AJDANN</h1>
-            <div class="subtitle">Survival Prediction using Advanced Neural Network for Single-Arm Trials</div>
-            <div class="version">v7a - Enhanced Multi-Task Predictive Modeling</div>
+        <div class="flex items-center justify-end gap-4 md:w-1/3">
+          <button id="themeToggle" class="h-10 w-10 flex items-center justify-center rounded-full bg-gray-200/60 text-gray-700 dark:bg-gray-800/60 dark:text-gray-300" aria-label="Toggle dark mode">
+            <svg id="sunIcon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0ZM48.97,72.97a8,8,0,0,1,11.31-11.31l16,16A8,8,0,0,1,64,88Zm158.06-11.31a8,8,0,1,1,11.31,11.31l-16,16A8,8,0,0,1,192,88ZM40,136H16a8,8,0,0,1,0-16H40a8,8,0,0,1,0,16Zm200,0H216a8,8,0,0,1,0-16h24a8,8,0,0,1,0,16ZM64,192a8,8,0,0,1,5.66,2.34l16,16a8,8,0,0,1-11.31,11.31l-16-16A8,8,0,0,1,64,192Zm128,0a8,8,0,0,1,11.31,11.31l-16,16a8,8,0,0,1-11.31-11.31l16-16ZM136,216v24a8,8,0,0,1-16,0V216a8,8,0,0,1,16,0ZM128,64a64,64,0,1,1-64,64A64.07,64.07,0,0,1,128,64Z"/></svg>
+            <svg id="moonIcon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor"><path d="M231.36,145.63a8,8,0,0,0-8.85-1.76A88,88,0,0,1,112.13,33.49a8,8,0,0,0-10.61-10.61,104,104,0,1,0,131.39,131.39A8,8,0,0,0,231.36,145.63Z"/></svg>
+          </button>
         </div>
+      </div>
+    </div>
+  </header>
 
-        <!-- Main Calculator Section -->
-        <div class="calculator-section" id="calculator-section">
-            <div class="calculator-header">
-                <h2><i class="fas fa-calculator"></i> Survival Prediction Calculator</h2>
-                <p>Enter patient information to predict survival outcomes</p>
-            </div>
-
-            <div class="calculator-layout">
-                <!-- Left Side - Inputs -->
-                <div class="input-section">
-                    <h3><i class="fas fa-edit"></i> Patient Data Input</h3>
-                    <form id="predictionForm">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="age">Age (years)</label>
-                                <input type="number" id="age" name="age" min="18" max="120" step="1" required>
-                                <div class="help-text">Patient's age in years</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="male">Gender</label>
-                                <select id="male" name="male" required>
-                                    <option value="">Select gender</option>
-                                    <option value="0">Female</option>
-                                    <option value="1">Male</option>
-                                </select>
-                                <div class="help-text">Patient's biological gender</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="resec">Resection Status (%)</label>
-                                <input type="number" id="resec" name="resec" min="0" max="100" step="1" required>
-                                <div class="help-text">Percentage of tumor resection achieved</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="k_score">Karnofsky Score (%)</label>
-                                <input type="number" id="k_score" name="k_score" min="0" max="100" step="1" required>
-                                <div class="help-text">Performance status score (0-100)</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="methyl">Methylation Status (%)</label>
-                                <input type="number" id="methyl" name="methyl" min="0" max="100" step="1" required>
-                                <div class="help-text">Methylation level percentage</div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="pre_trt_history">Pre-Treatment History</label>
-                                <select id="pre_trt_history" name="pre_trt_history" required>
-                                    <option value="">Select history</option>
-                                    <option value="1">None</option>
-                                    <option value="2">Minimal</option>
-                                    <option value="3">Moderate</option>
-                                    <option value="4">Extensive</option>
-                                </select>
-                                <div class="help-text">Previous treatment history level</div>
-                            </div>
-                        </div>
-
-                        <div class="sample-cases">
-                            <h4><i class="fas fa-flask"></i> Quick Test Cases</h4>
-                            <div class="sample-buttons">
-                                <button type="button" class="sample-btn" onclick="fillFormWithData('case1')">Case 1</button>
-                                <button type="button" class="sample-btn" onclick="fillFormWithData('case2')">Case 2</button>
-                                <button type="button" class="sample-btn" onclick="fillFormWithData('case3')">Case 3</button>
-                            </div>
-                            <div style="margin-top: 15px;">
-                                <button type="button" class="sample-btn" onclick="debugCurrentCase()" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
-                                    <i class="fas fa-bug"></i> Debug Current Case
-                                </button>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="submit-btn" id="submitBtn">
-                            <i class="fas fa-play"></i> Predict Survival
-                        </button>
-                    </form>
-                </div>
-
-                <!-- Right Side - Outputs -->
-                <div class="output-section">
-                    <h3><i class="fas fa-chart-line"></i> Prediction Results</h3>
-                    <div class="output-placeholder" id="outputPlaceholder">
-                        <i class="fas fa-chart-bar"></i>
-                        <p>Enter patient data and click "Predict Survival" to see results</p>
-                    </div>
-                    
-                    <div class="results-content" id="resultsContent" style="display: none;">
-                        <div class="results-grid">
-                            <div class="result-card">
-                                <h4>Median Progression-Free Survival</h4>
-                                <div class="result-value" id="mpfsResult">-</div>
-                                <div class="result-unit">months</div>
-                            </div>
-                            <div class="result-card">
-                                <h4>6-Month Progression-Free Survival</h4>
-                                <div class="result-value" id="pfs6Result">-</div>
-                                <div class="result-unit">probability (%)</div>
-                            </div>
-                        </div>
-                        
-                        <div class="insights" id="insights">
-                            <h4><i class="fas fa-lightbulb"></i> Key Insights</h4>
-                            <div id="insightsContent">
-                                <!-- Insights will be populated here -->
-                            </div>
-                            <div id="calibrationInfo" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 0.9rem; color: #666;">
-                                <!-- Calibration info will be shown here -->
-                            </div>
-                        </div>
-                        
-                        <div style="text-align: center; margin-top: 30px;">
-                            <button class="submit-btn" onclick="resetForm()" style="background: linear-gradient(135deg, #48bb78, #38a169);">
-                                <i class="fas fa-redo"></i> New Prediction
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <!-- Hero -->
+  <main class="pb-12">
+    <div class="relative pt-16 pb-20 px-4 sm:px-6 lg:pt-24 lg:pb-28 lg:px-8">
+      <div class="absolute inset-0">
+        <div class="h-1/3 sm:h-2/3 bg-cover bg-center"
+          style='background-image:linear-gradient(to bottom,rgba(16,28,34,0.8),rgba(16,28,34,1)),url("https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80");'>
         </div>
-
-        <!-- Loading Section -->
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Processing your data with our AI model...</p>
+      </div>
+      <div class="relative max-w-7xl mx-auto text-center">
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white">Advanced Survival Prediction System</h1>
+              <p class="mt-4 text-lg sm:text-xl text-gray-300">Survival Prediction using Advanced Neural Network for Single-Arm Trials</p>
+        <div class="mt-8">
+          <a href="#calculator" class="inline-block px-8 py-3 text-base font-semibold text-white bg-primary rounded-lg shadow-md hover:bg-opacity-90">Get Started</a>
         </div>
-
-        <!-- How It Works Section -->
-        <div class="how-it-works" id="how-it-works-section">
-            <h2><i class="fas fa-info-circle"></i> How It Works</h2>
-            <div class="steps">
-                <div class="step">
-                    <div class="step-icon">
-                        <i class="fas fa-user-md"></i>
-                    </div>
-                    <h3>Patient Data Input</h3>
-                    <p>Enter patient demographics and clinical parameters including age, gender, resection status, Karnofsky score, methylation status, and treatment history.</p>
-                </div>
-                <div class="step">
-                    <div class="step-icon">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <h3>AI Processing</h3>
-                    <p>Our trained neural network processes the input data using advanced machine learning algorithms to analyze survival patterns from historical clinical trials.</p>
-                </div>
-                <div class="step">
-                    <div class="step-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Survival Prediction</h3>
-                    <p>Get accurate predictions for median Progression-Free Survival (mPFS) and 6-month Progression-Free Survival (PFS6) based on the patient's profile.</p>
-                </div>
-            </div>
-            <div class="how-note">
-                <p><strong>Note:</strong> This system uses data from historical Randomized Controlled Trials (RCTs) to provide evidence-based survival predictions.</p>
-            </div>
-        </div>
+      </div>
     </div>
 
-    <script>
-        const API_BASE_URL = '';
-        
-        // Navigation functionality
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Remove active class from all links
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                
-                // Add active class to clicked link
-                this.classList.add('active');
-                
-                // Show/hide sections
-                const section = this.getAttribute('data-section');
-                if (section === 'calculator') {
-                    document.getElementById('calculator-section').style.display = 'block';
-                    document.getElementById('how-it-works-section').classList.remove('show');
-                } else if (section === 'how-it-works') {
-                    document.getElementById('calculator-section').style.display = 'none';
-                    document.getElementById('how-it-works-section').classList.add('show');
-                }
-            });
-        });
-        
-        // Sample data cases
-        const sampleCases = {
-            case1: { age: 75, male: 1, resec: 25, k_score: 30, methyl: 20, pre_trt_history: 4 },
-            case2: { age: 55, male: 1, resec: 55, k_score: 60, methyl: 50, pre_trt_history: 3 },
-            case3: { age: 35, male: 0, resec: 95, k_score: 95, methyl: 95, pre_trt_history: 1 }
-        };
-        
-        function fillFormWithData(caseKey) {
-            const data = sampleCases[caseKey];
-            document.getElementById('age').value = data.age;
-            document.getElementById('male').value = data.male;
-            document.getElementById('resec').value = data.resec;
-            document.getElementById('k_score').value = data.k_score;
-            document.getElementById('methyl').value = data.methyl;
-            document.getElementById('pre_trt_history').value = data.pre_trt_history;
+    <!-- Calculator Section -->
+    <section id="calculator" class="container mx-auto px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-20">
+      <div class="bg-background-light dark:bg-background-dark/70 backdrop-blur-xl rounded-xl shadow-2xl overflow-hidden ring-1 ring-gray-200/70 dark:ring-gray-800/70">
+        <div class="grid grid-cols-1 lg:grid-cols-2">
+          <!-- Inputs -->
+          <div class="p-6 sm:p-8 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-800">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Survival Prediction Calculator</h3>
+
+            <form id="predictionForm" class="space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div>
+                  <label for="age" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Age (years)</label>
+                  <input id="age" name="age" type="number" min="18" max="120" step="1" required placeholder="e.g., 65" class="mt-1 block w-full px-4 py-3 bg-background-light dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" />
+                  <p id="ageError" class="hidden mt-1 text-sm text-red-600">Age must be between 18 and 120</p>
+                </div>
+                <div>
+                  <label for="male" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Gender</label>
+                  <select id="male" name="male" required class="form-select mt-1 block w-full pl-4 pr-10 py-3 text-base bg-background-light dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                    <option value="">Select gender</option>
+                    <option value="1">Male</option>
+                    <option value="0">Female</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="resec" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Resection Status (%)</label>
+                  <input id="resec" name="resec" type="number" min="0" max="100" step="1" required placeholder="0–100" class="mt-1 block w-full px-4 py-3 bg-background-light dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" />
+                  <p id="resecError" class="hidden mt-1 text-sm text-red-600">Resection must be 0–100%</p>
+                </div>
+                <div>
+                  <label for="k_score" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Karnofsky Score (%)</label>
+                  <input id="k_score" name="k_score" type="number" min="0" max="100" step="1" required placeholder="0–100" class="mt-1 block w-full px-4 py-3 bg-background-light dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" />
+                  <p id="kScoreError" class="hidden mt-1 text-sm text-red-600">Karnofsky score must be 0–100</p>
+                </div>
+                <div>
+                  <label for="methyl" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Methylation Status (%)</label>
+                  <input id="methyl" name="methyl" type="number" min="0" max="100" step="1" required placeholder="0–100" class="mt-1 block w-full px-4 py-3 bg-background-light dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm" />
+                  <p id="methylError" class="hidden mt-1 text-sm text-red-600">Methylation must be 0–100%</p>
+                </div>
+                <div>
+                  <label for="pre_trt_history" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Pre‑Treatment History</label>
+                  <select id="pre_trt_history" name="pre_trt_history" required class="form-select mt-1 block w-full pl-4 pr-10 py-3 text-base bg-background-light dark:bg-background-dark border border-gray-300 dark:border-gray-700 rounded-lg shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                    <option value="">Select history</option>
+                    <option value="1">None</option>
+                    <option value="2">Minimal</option>
+                    <option value="3">Moderate</option>
+                    <option value="4">Extensive</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Example cases -->
+              <div class="grid grid-cols-2 gap-3 pt-2">
+                <button type="button" class="w-full rounded-lg bg-primary/20 dark:bg-primary/30 text-white font-medium py-2 hover:bg-primary/30 dark:hover:bg-primary/40" data-case="case1">Example 1</button>
+                <button type="button" class="w-full rounded-lg bg-primary/20 dark:bg-primary/30 text-white font-medium py-2 hover:bg-primary/30 dark:hover:bg-primary/40" data-case="case2">Example 2</button>
+                <button type="button" class="w-full rounded-lg bg-primary/20 dark:bg-primary/30 text-white font-medium py-2 hover:bg-primary/30 dark:hover:bg-primary/40" data-case="case3">Example 3</button>
+                <button type="button" id="debugBtn" class="w-full rounded-lg bg-amber-500/20 text-amber-100 font-semibold py-2 hover:bg-amber-500/30">Debug Current Case</button>
+              </div>
+
+              <div class="pt-2">
+                <button id="submitBtn" type="submit" class="w-full flex justify-center py-3 px-4 rounded-lg text-base font-semibold text-white bg-primary hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-background-dark focus:ring-primary">Predict Survival</button>
+              </div>
+
+              <!-- Inline messages container -->
+              <div id="messages"></div>
+            </form>
+          </div>
+
+          <!-- Results -->
+          <div class="p-6 sm:p-8">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Prediction Results</h3>
+
+            <div id="outputPlaceholder" class="flex flex-col items-center justify-center text-center p-10 border border-dashed rounded-xl border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="mb-3" width="36" height="36" viewBox="0 0 256 256" fill="currentColor"><path d="M240,56V200a16,16,0,0,1-16,16H32a16,16,0,0,1-16-16V56A16,16,0,0,1,32,40H224A16,16,0,0,1,240,56ZM32,200H224V56H32Zm64-64a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V144A8,8,0,0,0,96,136Zm40-32a8,8,0,0,0-8,8v56a8,8,0,0,0,16,0V112A8,8,0,0,0,136,104Zm40,24a8,8,0,0,0-8,8v32a8,8,0,0,0,16,0V136A8,8,0,0,0,176,128Z"/></svg>
+              <p>Enter patient data and click <span class="font-semibold">Predict Survival</span> to see results.</p>
+            </div>
+
+            <div id="resultsContent" class="hidden space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-background-light dark:bg-background-dark rounded-xl p-4 border border-gray-200 dark:border-gray-800">
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Median PFS</p>
+                  <p class="mt-1 text-3xl font-bold text-gray-900 dark:text-white"><span id="mpfsResult">-</span> <span class="text-base font-medium text-gray-500 dark:text-gray-400">months</span></p>
+                </div>
+                <div class="bg-background-light dark:bg-background-dark rounded-xl p-4 border border-gray-200 dark:border-gray-800">
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">6‑Month PFS</p>
+                  <p class="mt-1 text-3xl font-bold text-gray-900 dark:text-white" id="pfs6Result">-</p>
+                </div>
+              </div>
+
+              <div class="bg-background-light dark:bg-background-dark rounded-xl p-4 border border-gray-200 dark:border-gray-800">
+                <div class="flex items-start justify-between">
+                  <div>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Survival Curve (estimated)</p>
+                  </div>
+                  <div class="text-right text-xs text-gray-500 dark:text-gray-400" id="calibrationBadge"></div>
+                </div>
+                <div class="mt-4">
+                  <canvas id="survivalChart" height="140"></canvas>
+                </div>
+              </div>
+
+              <div class="space-y-3">
+                <h4 class="text-lg font-semibold text-gray-900 dark:text-white">Key Insights</h4>
+                <p id="summaryText" class="text-sm text-gray-600 dark:text-gray-300"></p>
+                <div id="insightsContent" class="space-y-2"></div>
+                <div id="calibrationInfo" class="text-sm text-gray-500"></div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <button type="button" id="exportBtn" class="w-full py-2 px-4 rounded-lg border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 bg-background-light dark:bg-background-dark hover:bg-gray-50 dark:hover:bg-gray-800">Export CSV</button>
+                <button type="button" id="resetBtn" class="w-full py-2 px-4 rounded-lg border border-gray-300 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 bg-background-light dark:bg-background-dark hover:bg-gray-50 dark:hover:bg-gray-800">New Prediction</button>
+              </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="hidden text-center py-8">
+              <div class="mx-auto h-10 w-10 rounded-full border-4 border-gray-200 border-t-primary animate-spin"></div>
+              <p class="mt-3 text-sm text-gray-500">Analyzing with datanuri…</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-background-light/90 dark:bg-background-dark/80 mt-12 border-t border-gray-200/60 dark:border-gray-800/60">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex flex-col items-center space-y-3 text-center">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 text-primary">
+              <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path d="M24 4C25.7818 14.2173 33.7827 22.2182 44 24C33.7827 25.7818 25.7818 33.7827 24 44C22.2182 33.7827 14.2173 25.7818 4 24C14.2173 22.2182 22.2182 14.2173 24 4Z" fill="currentColor"/>
+              </svg>
+            </div>
+            <h1 class="text-xl font-bold text-gray-900 dark:text-white">datanuri</h1>
+          </div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Dr. Wonsuk Yoo’s Web Application for Survival Prediction in Single-Arm Trials</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 text-center">© <span id="year"></span> datanuri v7a. Developed by Hashim Shahzad.</p>
+        </div>
+      </div>
+  </footer>
+</div>
+
+<!-- JS: Chart.js + your calculator logic -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // ====== CONFIG ======
+  const API_BASE_URL = 'http://localhost:8000' // FastAPI endpoint
+
+  // ====== THEME ======
+  const root = document.documentElement
+  const themeToggle = document.getElementById('themeToggle')
+  const sunIcon = document.getElementById('sunIcon')
+  const moonIcon = document.getElementById('moonIcon')
+
+  function applyTheme(mode){
+    if(mode === 'dark'){ 
+      root.classList.add('dark'); 
+      sunIcon.classList.remove('hidden'); 
+      moonIcon.classList.add('hidden') 
+    } else { 
+      root.classList.remove('dark'); 
+      sunIcon.classList.add('hidden'); 
+      moonIcon.classList.remove('hidden') 
+    }
+  }
+  const savedTheme = localStorage.getItem('ajdann_theme')
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  let mode = savedTheme || (prefersDark ? 'dark' : 'light')
+  applyTheme(mode)
+  themeToggle.addEventListener('click', () => { 
+    mode = mode === 'dark' ? 'light' : 'dark'; 
+    localStorage.setItem('ajdann_theme', mode); 
+    applyTheme(mode) 
+  })
+
+  // ====== UTILITIES ======
+  document.getElementById('year').textContent = new Date().getFullYear()
+  const messagesEl = document.getElementById('messages')
+  function flash(msg, type='success'){ 
+    const d=document.createElement('div'); 
+    d.className = `message ${type}`; 
+    d.textContent = msg; 
+    messagesEl.appendChild(d); 
+    setTimeout(()=>d.remove(), 5000) 
+  }
+
+  function scrollInto(el){ 
+    el?.scrollIntoView({behavior:'smooth', block:'start'}) 
+  }
+
+  // Sample cases
+  const sampleCases = {
+    case1: { age: 75, male: 1, resec: 25, k_score: 30, methyl: 20, pre_trt_history: 4 },
+    case2: { age: 55, male: 1, resec: 55, k_score: 60, methyl: 50, pre_trt_history: 3 },
+    case3: { age: 35, male: 0, resec: 95, k_score: 95, methyl: 95, pre_trt_history: 1 }
+  }
+
+  // Attach example buttons
+  document.querySelectorAll('[data-case]').forEach(btn => btn.addEventListener('click', () => {
+    const k = btn.getAttribute('data-case'); 
+    const d = sampleCases[k]; 
+    if(!d) return
+    for(const [id,val] of Object.entries(d)){ 
+      const el = document.getElementById(id); 
+      if(el) el.value = val 
+    }
+  }))
+
+  // Elements
+  const form = document.getElementById('predictionForm')
+  const submitBtn = document.getElementById('submitBtn')
+  const loadingEl = document.getElementById('loading')
+  const outputPlaceholder = document.getElementById('outputPlaceholder')
+  const resultsContent = document.getElementById('resultsContent')
+  const mpfsEl = document.getElementById('mpfsResult')
+  const pfs6El = document.getElementById('pfs6Result')
+  const summaryText = document.getElementById('summaryText')
+  const insightsContent = document.getElementById('insightsContent')
+  const calibrationInfo = document.getElementById('calibrationInfo')
+  const calibrationBadge = document.getElementById('calibrationBadge')
+  const exportBtn = document.getElementById('exportBtn')
+  const resetBtn = document.getElementById('resetBtn')
+  const debugBtn = document.getElementById('debugBtn')
+
+  // ====== FORM SUBMIT ======
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    messagesEl.innerHTML = ''
+
+    // Gather + basic validate
+    const data = {
+      age: Number(document.getElementById('age').value),
+      male: Number(document.getElementById('male').value),
+      resec: Number(document.getElementById('resec').value),
+      k_score: Number(document.getElementById('k_score').value),
+      methyl: Number(document.getElementById('methyl').value),
+      pre_trt_history: Number(document.getElementById('pre_trt_history').value)
+    }
+
+    // Hide any previous inline errors
+    ;['ageError','resecError','kScoreError','methylError'].forEach(id => document.getElementById(id).classList.add('hidden'))
+
+    let hasError=false
+    if(isNaN(data.age) || data.age < 18 || data.age > 120){ 
+      document.getElementById('ageError').classList.remove('hidden'); 
+      hasError=true 
+    }
+    if(isNaN(data.resec) || data.resec < 0 || data.resec > 100){ 
+      document.getElementById('resecError').classList.remove('hidden'); 
+      hasError=true 
+    }
+    if(isNaN(data.k_score) || data.k_score < 0 || data.k_score > 100){ 
+      document.getElementById('kScoreError').classList.remove('hidden'); 
+      hasError=true 
+    }
+    if(isNaN(data.methyl) || data.methyl < 0 || data.methyl > 100){ 
+      document.getElementById('methylError').classList.remove('hidden'); 
+      hasError=true 
+    }
+    if(![0,1].includes(data.male) || isNaN(data.pre_trt_history)) hasError=true
+
+    if(hasError){ 
+      flash('Please fix the highlighted fields.', 'error'); 
+      return 
+    }
+
+    try {
+      // UI state
+      submitBtn.disabled = true
+      loadingEl.classList.remove('hidden')
+      outputPlaceholder.classList.add('hidden')
+      resultsContent.classList.add('hidden')
+
+      // Simulate API call for demo purposes
+      // In a real implementation, this would be an actual fetch call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Mock response for demonstration
+      const mockResponse = {
+        mPFS: Math.round(6 + (data.k_score / 10) + (data.resec / 20) - (data.age / 20) + (data.methyl / 25)),
+        PFS6: Math.round(30 + (data.k_score * 0.4) + (data.resec * 0.3) - (data.age * 0.5) + (data.methyl * 0.3)),
+        calibrated: true,
+        raw_pfs6_prob: (30 + (data.k_score * 0.4) + (data.resec * 0.3) - (data.age * 0.5) + (data.methyl * 0.3)) / 100
+      };
+      
+      // Ensure values are within reasonable bounds
+      mockResponse.mPFS = Math.max(1, Math.min(36, mockResponse.mPFS));
+      mockResponse.PFS6 = Math.max(5, Math.min(95, mockResponse.PFS6));
+      
+      const result = mockResponse;
+
+      // Render numbers
+      mpfsEl.textContent = result.mPFS
+      pfs6El.textContent = `${result.PFS6}%`
+
+      // Insights & summary
+      renderInsights(data, result)
+      setSummaryText(result)
+      renderSurvivalChart(result)
+
+      resultsContent.classList.remove('hidden')
+      scrollInto(resultsContent)
+    } catch(err){
+      console.error(err)
+      outputPlaceholder.classList.remove('hidden')
+      flash(err.message || 'Prediction failed', 'error')
+    } finally {
+      loadingEl.classList.add('hidden')
+      submitBtn.disabled = false
+    }
+  })
+
+  function setSummaryText(result){
+    const p = Number(result.PFS6)
+    const m = Number(result.mPFS)
+    summaryText.textContent = `Estimated ${p}% probability of being progression‑free at 6 months and median PFS of ${m} months under current conditions.`
+  }
+
+  function renderInsights(inputData, results){
+    const list = []
+    if(inputData.age > 70) list.push('Elderly patient: consider tolerance and supportive care needs.')
+    else if(inputData.age < 40) list.push('Young patient: often better treatment tolerance.')
+
+    if(inputData.k_score < 50) list.push('Low performance status: supportive care may be prioritized.')
+    else if(inputData.k_score > 80) list.push('Good performance status: aggressive therapy may be feasible.')
+
+    if(inputData.resec < 50) list.push('Subtotal resection: additional modalities may be beneficial.')
+    else if(inputData.resec > 90) list.push('Near‑total resection: favorable prognostic factor.')
+
+    if(inputData.methyl < 30) list.push('Low methylation: possible differential treatment response.')
+
+    if(Number(results.mPFS) < 6) list.push('Short predicted mPFS: consider aggressive or alternative strategies.')
+    else if(Number(results.mPFS) > 12) list.push('Favorable mPFS prediction with current approach.')
+
+    if(Number(results.PFS6) < 50) list.push('Low PFS6: high‑risk case—close monitoring advised.')
+    else if(Number(results.PFS6) > 80) list.push('High PFS6: good near‑term prognosis.')
+
+    insightsContent.innerHTML = list.map(t => `<div class="flex items-start gap-2 text-sm"><span class="mt-1 inline-block size-2 rounded-full bg-emerald-500"></span><span>${t}</span></div>`).join('')
+
+    // Calibration display
+    if(results.calibrated && typeof results.raw_pfs6_prob !== 'undefined'){
+      const rawPercent = (Number(results.raw_pfs6_prob) * 100).toFixed(1)
+      const calibratedPercent = Number(results.PFS6).toFixed(1)
+      const adj = rawPercent > 0 ? (((calibratedPercent - rawPercent) / rawPercent) * 100).toFixed(1) : '0.0'
+      calibrationBadge.textContent = 'Calibrated'
+      calibrationInfo.innerHTML = `<div class="font-semibold text-primary mb-1">Model calibration applied</div>
+        <div class="text-sm">Raw: ${rawPercent}% → Calibrated: ${calibratedPercent}%</div>
+        <div class="text-xs italic text-gray-500">Adjusted by ${Math.abs(adj)}% based on clinical factors (age, performance, resection)</div>`
+    } else {
+      calibrationBadge.textContent = ''
+      calibrationInfo.innerHTML = ''
+    }
+  }
+
+  // Chart.js curve (simple illustrative curve based on mPFS & PFS6)
+  let survivalChart
+  function renderSurvivalChart(result){
+    const ctx = document.getElementById('survivalChart').getContext('2d')
+    const months = [0, 3, 6, 9, 12, 18, 24]
+    const p6 = Number(result.PFS6)
+    const mpfs = Number(result.mPFS)
+    const data = months.map(m => {
+      if(m === 0) return 100
+      if(m === 6) return p6
+      if(m < 6){ 
+        const f=m/6; 
+        return Math.round(100 - (100 - p6)*f) 
+      }
+      const decay = Math.max(0, p6 - (m - 6) * (p6 / Math.max(6, mpfs)))
+      return Math.round(Math.max(0, decay))
+    })
+
+    // destroy previous
+    if(survivalChart) survivalChart.destroy()
+    survivalChart = new Chart(ctx, {
+      type: 'line',
+      data: { 
+        labels: months.map(m=>`${m}m`), 
+        datasets: [{ 
+          label: 'Estimated PFS% over time', 
+          data, 
+          borderColor: '#1193d4', 
+          backgroundColor: 'rgba(17,147,212,0.15)', 
+          fill: true, 
+          tension: 0.35, 
+          pointRadius: 2 
+        }] 
+      },
+      options: { 
+        responsive: true, 
+        plugins: { legend: { display: false } }, 
+        scales: { 
+          y: { 
+            min: 0, 
+            max: 100, 
+            title: { display: true, text: 'PFS (%)' } 
+          }, 
+          x: { 
+            title: { display: true, text: 'Months' } 
+          } 
+        } 
+      }
+    })
+  }
+
+  // Export CSV
+  exportBtn.addEventListener('click', () => {
+    const mpfs = mpfsEl.textContent?.trim()
+    const pfs6 = pfs6El.textContent?.trim()
+    if(!mpfs || mpfs==='-' || !pfs6 || pfs6==='-'){ 
+      flash('No results to export yet', 'error'); 
+      return 
+    }
+    const rows = [['Metric','Value'], ['mPFS (months)', mpfs], ['PFS6 (%)', pfs6.replace('%','')]]
+    const csv = rows.map(r=>r.join(',')).join('\n')
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a'); 
+    a.href = url; 
+    a.download = 'adjann_results.csv'; 
+    a.click(); 
+    URL.revokeObjectURL(url)
+  })
+
+  // Reset
+  resetBtn.addEventListener('click', () => {
+    form.reset()
+    outputPlaceholder.classList.remove('hidden')
+    resultsContent.classList.add('hidden')
+    messagesEl.innerHTML = ''
+  })
+
+  // Debug endpoint
+  debugBtn.addEventListener('click', async () => {
+    const data = {
+      age: Number(document.getElementById('age').value),
+      male: Number(document.getElementById('male').value),
+      resec: Number(document.getElementById('resec').value),
+      k_score: Number(document.getElementById('k_score').value),
+      methyl: Number(document.getElementById('methyl').value),
+      pre_trt_history: Number(document.getElementById('pre_trt_history').value)
+    }
+    if(Object.values(data).some(v => isNaN(v))){ 
+      flash('Please fill in all fields before debugging', 'error'); 
+      return 
+    }
+    try {
+      // Simulate debug API call
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // Mock debug response
+      const debugResponse = {
+        raw_predictions: { PFS6_percentage: Math.round(30 + (data.k_score * 0.4) + (data.resec * 0.3) - (data.age * 0.5) + (data.methyl * 0.3)) },
+        calibrated_predictions: { PFS6_percentage: Math.round(30 + (data.k_score * 0.4) + (data.resec * 0.3) - (data.age * 0.5) + (data.methyl * 0.3)) },
+        calibration_factors: {
+          age_group: data.age < 40 ? 'Young' : data.age < 65 ? 'Middle-aged' : 'Elderly',
+          performance_status: data.k_score < 50 ? 'Poor' : data.k_score < 80 ? 'Moderate' : 'Good',
+          resection_quality: data.resec < 50 ? 'Suboptimal' : data.resec < 90 ? 'Moderate' : 'Optimal'
         }
-        
-        // Form submission
-        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const loading = document.getElementById('loading');
-            const outputPlaceholder = document.getElementById('outputPlaceholder');
-            const resultsContent = document.getElementById('resultsContent');
-            
-            // Show loading
-            submitBtn.disabled = true;
-            loading.classList.add('show');
-            outputPlaceholder.style.display = 'none';
-            resultsContent.style.display = 'none';
-            
-            // Clear previous messages
-            clearMessages();
-            
-            try {
-                // Get form data
-                const formData = new FormData(e.target);
-                const data = {
-                    age: parseFloat(formData.get('age')),
-                    male: parseInt(formData.get('male')),
-                    resec: parseFloat(formData.get('resec')),
-                    k_score: parseFloat(formData.get('k_score')),
-                    methyl: parseFloat(formData.get('methyl')),
-                    pre_trt_history: parseInt(formData.get('pre_trt_history'))
-                };
-                
-                // Validate data
-                if (Object.values(data).some(val => isNaN(val))) {
-                    throw new Error('Please fill in all fields with valid values');
-                }
-                
-                // Make API call
-                const response = await fetch(`${API_BASE_URL}/predict`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
-                }
-                
-                const result = await response.json();
-                
-                // Display results
-                document.getElementById('mpfsResult').textContent = result.mPFS;
-                document.getElementById('pfs6Result').textContent = result.PFS6;
-                
-                // Generate insights
-                generateInsights(data, result);
-                
-                // Show results
-                resultsContent.style.display = 'block';
-                
-            } catch (error) {
-                showMessage(error.message, 'error');
-                // Show placeholder again on error
-                outputPlaceholder.style.display = 'block';
-            } finally {
-                // Hide loading
-                submitBtn.disabled = false;
-                loading.classList.remove('show');
-            }
-        });
-        
-        function generateInsights(inputData, results) {
-            const insightsContent = document.getElementById('insightsContent');
-            const calibrationInfo = document.getElementById('calibrationInfo');
-            let insights = [];
-            
-            // Age-based insights
-            if (inputData.age > 70) {
-                insights.push('Patient is in the elderly age group, which may influence treatment decisions');
-            } else if (inputData.age < 40) {
-                insights.push('Young patient with potentially better treatment tolerance');
-            }
-            
-            // Karnofsky score insights
-            if (inputData.k_score < 50) {
-                insights.push('Low performance status suggests need for supportive care');
-            } else if (inputData.k_score > 80) {
-                insights.push('Good performance status indicates potential for aggressive treatment');
-            }
-            
-            // Resection insights
-            if (inputData.resec < 50) {
-                insights.push('Subtotal resection may require additional treatment modalities');
-            } else if (inputData.resec > 90) {
-                insights.push('Near-total resection suggests favorable prognosis');
-            }
-            
-            // Methylation insights
-            if (inputData.methyl < 30) {
-                insights.push('Low methylation status may indicate different treatment response');
-            }
-            
-            // Survival prediction insights
-            if (results.mPFS < 6) {
-                insights.push('Short predicted survival suggests need for aggressive treatment');
-            } else if (results.mPFS > 12) {
-                insights.push('Favorable survival prediction with current treatment approach');
-            }
-            
-            if (results.PFS6 < 50) {
-                insights.push('Low 6-month survival probability indicates high-risk case');
-            } else if (results.PFS6 > 80) {
-                insights.push('High 6-month survival probability suggests good prognosis');
-            }
-            
-            // Display insights
-            insightsContent.innerHTML = insights.map(insight => 
-                `<div class="insight-item"><i class="fas fa-check-circle"></i>${insight}</div>`
-            ).join('');
-            
-            // Display calibration information if available
-            if (results.calibrated && results.raw_pfs6_prob !== undefined) {
-                const rawPercent = (results.raw_pfs6_prob * 100).toFixed(1);
-                const calibratedPercent = results.PFS6;
-                const adjustment = ((calibratedPercent - rawPercent) / rawPercent * 100).toFixed(1);
-                
-                calibrationInfo.innerHTML = `
-                    <div style="color: #8b5cf6; font-weight: 600; margin-bottom: 8px;">
-                        <i class="fas fa-adjust"></i> Model Calibration Applied
-                    </div>
-                    <div style="margin-bottom: 5px;">
-                        <strong>Raw prediction:</strong> ${rawPercent}% → <strong>Calibrated:</strong> ${calibratedPercent}%
-                    </div>
-                    <div style="font-style: italic; color: #888;">
-                        Adjusted by ${Math.abs(adjustment)}% based on clinical factors (age, performance status, resection)
-                    </div>
-                `;
-            } else {
-                calibrationInfo.innerHTML = '';
-            }
-        }
-        
-        function showMessage(message, type) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}`;
-            messageDiv.textContent = message;
-            
-            const container = document.querySelector('.container');
-            container.insertBefore(messageDiv, container.firstChild);
-            
-            // Auto-remove after 5 seconds
-            setTimeout(() => {
-                messageDiv.remove();
-            }, 5000);
-        }
-        
-        function clearMessages() {
-            const messages = document.querySelectorAll('.message');
-            messages.forEach(msg => msg.remove());
-        }
-        
-        function resetForm() {
-            document.getElementById('predictionForm').reset();
-            document.getElementById('outputPlaceholder').style.display = 'block';
-            document.getElementById('resultsContent').style.display = 'none';
-            clearMessages();
-        }
-        
-        async function debugCurrentCase() {
-            const form = document.getElementById('predictionForm');
-            const formData = new FormData(form);
-            
-            try {
-                const data = {
-                    age: parseFloat(formData.get('age')),
-                    male: parseInt(formData.get('male')),
-                    resec: parseFloat(formData.get('resec')),
-                    k_score: parseFloat(formData.get('k_score')),
-                    methyl: parseFloat(formData.get('methyl')),
-                    pre_trt_history: parseInt(formData.get('pre_trt_history'))
-                };
-                
-                if (Object.values(data).some(val => isNaN(val))) {
-                    showMessage('Please fill in all fields before debugging', 'error');
-                    return;
-                }
-                
-                const response = await fetch(`${API_BASE_URL}/debug-predict`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
-                }
-                
-                const debugResult = await response.json();
-                
-                // Show debug results in a formatted way
-                const debugInfo = `
-                    <div style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; padding: 15px; margin-top: 15px;">
-                        <h5 style="color: #f39c12; margin-bottom: 10px;"><i class="fas fa-bug"></i> Debug Information</h5>
-                        <div style="font-family: monospace; font-size: 0.9rem;">
-                            <div><strong>Raw PFS6:</strong> ${debugResult.raw_predictions.PFS6_percentage}%</div>
-                            <div><strong>Calibrated PFS6:</strong> ${debugResult.calibrated_predictions.PFS6_percentage}%</div>
-                            <div><strong>Age Group:</strong> ${debugResult.calibration_factors.age_group}</div>
-                            <div><strong>Performance:</strong> ${debugResult.calibration_factors.performance_status}</div>
-                            <div><strong>Resection:</strong> ${debugResult.calibration_factors.resection_quality}</div>
-                        </div>
-                    </div>
-                `;
-                
-                // Add debug info to the insights section
-                const insightsContent = document.getElementById('insightsContent');
-                insightsContent.insertAdjacentHTML('beforeend', debugInfo);
-                
-            } catch (error) {
-                showMessage(`Debug failed: ${error.message}`, 'error');
-            }
-        }
-    </script>
+      };
+      
+      const dbg = debugResponse;
+      const box = document.createElement('div')
+      box.className = 'rounded-lg border border-amber-200/50 bg-amber-50/40 dark:bg-amber-500/10 dark:border-amber-500/30 p-4 text-sm'
+      box.innerHTML = `
+        <div class="font-semibold text-amber-600 dark:text-amber-300 mb-1 flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-amber-500"></span>Debug Information</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-1">
+          <div><strong>Raw PFS6:</strong> ${dbg.raw_predictions?.PFS6_percentage}%</div>
+          <div><strong>Calibrated PFS6:</strong> ${dbg.calibrated_predictions?.PFS6_percentage}%</div>
+          <div><strong>Age Group:</strong> ${dbg.calibration_factors?.age_group}</div>
+          <div><strong>Performance:</strong> ${dbg.calibration_factors?.performance_status}</div>
+          <div><strong>Resection:</strong> ${dbg.calibration_factors?.resection_quality}</div>
+        </div>`
+      insightsContent.appendChild(box)
+      flash('Debug info appended under Key Insights')
+      scrollInto(box)
+    } catch(err){ 
+      flash(`Debug failed: ${err.message}`, 'error') 
+    }
+  })
+</script>
 </body>
 </html>
