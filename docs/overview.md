@@ -7,7 +7,7 @@ This repository now focuses on the **datanuri v7a** pipeline—an ANN-based surv
 - `frontend/`: public-facing pages (`index.html`, `about.html`, `contact.html`) plus static assets
 - `backend/`: FastAPI + Flask hybrid backend, retraining script, and requirements files
 - `models/`: v7a training script (`ajdANN_v7a.py`) alongside the exported weights under `models/saved_models_v7a/`
-- `csv_predicted_results/`: example outputs generated during experimentation
+- `rct_data/`: historical single-arm trial dataset used for training/evaluation
 - `docs/`: project overview (`overview.md`) and calibration notes (`calibration.md`)
 - `Prof Notes/`: reference images from collaboration with Dr. Yoo
 
@@ -46,4 +46,4 @@ pip install -r backend/requirements.txt
 ## Outputs
 - Frontend visualizations and CSV exports under `frontend/`
 - Model artifacts stored in `models/saved_models_v7a`
-- Additional CSV predictions under `csv_predicted_results/`
+- Historical CSV inputs stored under `rct_data/`
