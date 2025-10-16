@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -130,25 +130,33 @@ STATIC_DIR.mkdir(parents=True, exist_ok=True)
 
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
+def _serve_frontend_page(page_name: str):
+    page_path = FRONTEND_DIR / page_name
+    if not page_path.exists():
+        raise HTTPException(status_code=404, detail=f"{page_name} not found")
+    return FileResponse(str(page_path))
+
+
 @app.get("/")
 def read_root():
-    return FileResponse(str(FRONTEND_DIR / "index.html"))
+    return _serve_frontend_page("index.html")
 
 
+@app.get("/index.html")
+def read_root_legacy():
+    return _serve_frontend_page("index.html")
+
+
+@app.get("/about")
 @app.get("/about.html")
 def read_about():
-    about_path = FRONTEND_DIR / "about.html"
-    if not about_path.exists():
-        return {"error": "About page not found"}
-    return FileResponse(str(about_path))
+    return _serve_frontend_page("about.html")
 
 
+@app.get("/contact")
 @app.get("/contact.html")
 def read_contact():
-    contact_path = FRONTEND_DIR / "contact.html"
-    if not contact_path.exists():
-        return {"error": "Contact page not found"}
-    return FileResponse(str(contact_path))
+    return _serve_frontend_page("contact.html")
 
 @app.get("/api/status")
 def api_status():
