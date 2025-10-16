@@ -134,6 +134,22 @@ app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 def read_root():
     return FileResponse(str(FRONTEND_DIR / "index.html"))
 
+
+@app.get("/about.html")
+def read_about():
+    about_path = FRONTEND_DIR / "about.html"
+    if not about_path.exists():
+        return {"error": "About page not found"}
+    return FileResponse(str(about_path))
+
+
+@app.get("/contact.html")
+def read_contact():
+    contact_path = FRONTEND_DIR / "contact.html"
+    if not contact_path.exists():
+        return {"error": "Contact page not found"}
+    return FileResponse(str(contact_path))
+
 @app.get("/api/status")
 def api_status():
     return {"message": "ADJANN Survival Prediction API", "status": "running", "model_version": active_version}
