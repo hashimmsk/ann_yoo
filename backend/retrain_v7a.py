@@ -27,10 +27,11 @@ def retrain_with_calibration():
     """Retrain the v7a model with improved calibration"""
     print("🚀 Retraining AJDANN v7a with improved PFS6 calibration...")
     
-    sys.path.insert(0, str(ROOT_DIR / "models"))
     try:
-        # Import the training module
-        import ajdANN_v7a
+        if str(ROOT_DIR) not in sys.path:
+            sys.path.append(str(ROOT_DIR))
+
+        from models import ajdANN_v7a
 
         # Prepare arguments for training with explicit paths
         data_path = ROOT_DIR / "backend" / "dat_hc_simul.csv"
@@ -53,7 +54,8 @@ def retrain_with_calibration():
         print(f"❌ Model retraining failed: {e}")
         return False
     finally:
-        sys.path.pop(0)
+        if str(ROOT_DIR) in sys.path:
+            sys.path.remove(str(ROOT_DIR))
 
 def main():
     print("=" * 60)

@@ -9,7 +9,13 @@ from pathlib import Path
 from flask import Flask, send_from_directory
 import threading
 import uvicorn
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.append(str(ROOT_DIR))
+
 from api import app as fastapi_app
+from models import ajdANN_v7a
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = ROOT_DIR / "frontend"
@@ -62,10 +68,7 @@ def train_model():
     """Train the ADJANN model"""
     print("🚀 Training ADJANN v7a model...")
     data_path = ROOT_DIR / "backend" / "dat_hc_simul.csv"
-    sys.path.insert(0, str(ROOT_DIR / "models"))
     try:
-        import ajdANN_v7a
-
         dataset = ajdANN_v7a.load_dataset(str(data_path))
         ajdANN_v7a.set_seeds()
         ajdANN_v7a.train_and_evaluate(
@@ -80,8 +83,6 @@ def train_model():
         print(f"❌ v7a model training failed: {e}")
         print("Note: Make sure the dataset file exists at the specified path")
         return False
-    finally:
-        sys.path.pop(0)
 
 def check_model_quality():
     """Check if the existing model produces reasonable PFS6 values"""
