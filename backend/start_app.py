@@ -4,10 +4,7 @@ ADJANN Application Startup Script
 This script trains the model and starts the Flask server with FastAPI backend
 """
 
-import os
 import sys
-import subprocess
-import time
 from pathlib import Path
 from flask import Flask, send_from_directory
 import threading
@@ -29,13 +26,16 @@ flask_app = Flask(__name__,
 def index():
     return send_from_directory(str(FRONTEND_DIR), 'index.html')
 
+
 @flask_app.route('/about.html')
 def about():
     return send_from_directory(str(FRONTEND_DIR), 'about.html')
 
+
 @flask_app.route('/contact.html')
 def contact():
     return send_from_directory(str(FRONTEND_DIR), 'contact.html')
+
 
 def check_dependencies():
     """Check if required dependencies are installed"""
@@ -61,17 +61,27 @@ def check_dependencies():
 def train_model():
     """Train the ADJANN model"""
     print("🚀 Training ADJANN v7a model...")
+    data_path = ROOT_DIR / "backend" / "dat_hc_simul.csv"
+    sys.path.insert(0, str(ROOT_DIR / "models"))
     try:
-        # Train v7a model
-        sys.path.insert(0, str(ROOT_DIR / "models"))
-        import ajdANN_v7a  # noqa: F401
-        sys.path.pop(0)
+        import ajdANN_v7a
+
+        dataset = ajdANN_v7a.load_dataset(str(data_path))
+        ajdANN_v7a.set_seeds()
+        ajdANN_v7a.train_and_evaluate(
+            data=dataset,
+            output_dir=str(MODELS_DIR / "saved_models_v7a"),
+            temperature=2.0,
+        )
+
         print("✅ v7a model training completed successfully")
         return True
     except Exception as e:
         print(f"❌ v7a model training failed: {e}")
         print("Note: Make sure the dataset file exists at the specified path")
         return False
+    finally:
+        sys.path.pop(0)
 
 def check_model_quality():
     """Check if the existing model produces reasonable PFS6 values"""

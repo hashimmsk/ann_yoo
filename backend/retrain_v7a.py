@@ -4,7 +4,6 @@ Retrain AJDANN v7a with improved PFS6 calibration
 This script retrains the model using temperature scaling and better target processing
 """
 
-import os
 import sys
 import shutil
 from pathlib import Path
@@ -28,23 +27,33 @@ def retrain_with_calibration():
     """Retrain the v7a model with improved calibration"""
     print("🚀 Retraining AJDANN v7a with improved PFS6 calibration...")
     
+    sys.path.insert(0, str(ROOT_DIR / "models"))
     try:
         # Import the training module
-        sys.path.insert(0, str(ROOT_DIR / "models"))
         import ajdANN_v7a
-        
-        # Actually run the training by calling the main function
+
+        # Prepare arguments for training with explicit paths
+        data_path = ROOT_DIR / "backend" / "dat_hc_simul.csv"
+        output_path = V7_MODEL_DIR
+
         print("🔥 Starting actual model training...")
-        ajdANN_v7a.main()
-        sys.path.pop(0)
-        
+        ajdANN_v7a.set_seeds()
+        dataset = ajdANN_v7a.load_dataset(str(data_path))
+        ajdANN_v7a.train_and_evaluate(
+            data=dataset,
+            output_dir=str(output_path),
+            temperature=2.0,
+        )
+
         print("✅ Model retraining completed successfully!")
         print("🌡️  Temperature scaling applied for better PFS6 calibration")
         return True
-        
+
     except Exception as e:
         print(f"❌ Model retraining failed: {e}")
         return False
+    finally:
+        sys.path.pop(0)
 
 def main():
     print("=" * 60)

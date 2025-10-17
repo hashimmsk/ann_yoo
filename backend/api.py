@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-import os
 from pathlib import Path
 import numpy as np
 import joblib
@@ -126,9 +125,8 @@ class InputData(BaseModel):
 # Mount static files directory
 FRONTEND_DIR = ROOT_DIR / "frontend"
 STATIC_DIR = FRONTEND_DIR / "static"
-STATIC_DIR.mkdir(parents=True, exist_ok=True)
-
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
 
 def _serve_frontend_page(page_name: str):
     page_path = FRONTEND_DIR / page_name
@@ -167,76 +165,12 @@ def predict(data: InputData):
     if model is None or scaler is None:
         return {"error": "Model not loaded. Please check the server logs."}
     
-    # TEMPORARY FIX: Hardcoded realistic values for sample cases
-    # This bypasses the model issues while we fix the training
-    sample_case_1 = [75, 1, 25, 30, 20, 4]  # Case 1: elderly, poor performance, poor resection
-    sample_case_2 = [55, 1, 55, 60, 50, 3]  # Case 2: middle-aged, moderate performance, suboptimal resection
-    sample_case_3 = [35, 0, 95, 95, 95, 1]  # Case 3: young, excellent performance, excellent resection
-    
-    input_values = [data.age, data.male, data.resec, data.k_score, data.methyl, data.pre_trt_history]
-    
-    # Check if this matches any of our sample cases
-    if input_values == sample_case_1:
-        print("🎯 Using hardcoded values for Case 1 (elderly, poor factors)")
-        return {
-            "mPFS": 4.5,
-            "PFS6": 38.5,  # Realistic: elderly, poor performance, poor resection
-            "model_version": "v7a_hardcoded",
-            "raw_pfs6_prob": 0.385,
-            "calibrated": True,
-            "note": "Hardcoded realistic values for Case 1",
-            "input_data": {
-                "age": data.age,
-                "male": data.male,
-                "resec": data.resec,
-                "k_score": data.k_score,
-                "methyl": data.methyl,
-                "pre_trt_history": data.pre_trt_history
-            }
-        }
-    elif input_values == sample_case_2:
-        print("🎯 Using hardcoded values for Case 2 (moderate factors)")
-        return {
-            "mPFS": 7.2,
-            "PFS6": 58.0,  # Realistic: moderate factors
-            "model_version": "v7a_hardcoded",
-            "raw_pfs6_prob": 0.58,
-            "calibrated": True,
-            "note": "Hardcoded realistic values for Case 2",
-            "input_data": {
-                "age": data.age,
-                "male": data.male,
-                "resec": data.resec,
-                "k_score": data.k_score,
-                "methyl": data.methyl,
-                "pre_trt_history": data.pre_trt_history
-            }
-        }
-    elif input_values == sample_case_3:
-        print("🎯 Using hardcoded values for Case 3 (young, excellent factors)")
-        return {
-            "mPFS": 12.8,
-            "PFS6": 76.5,  # Realistic: young, excellent performance, excellent resection
-            "model_version": "v7a_hardcoded",
-            "raw_pfs6_prob": 0.765,
-            "calibrated": True,
-            "note": "Hardcoded realistic values for Case 3",
-            "input_data": {
-                "age": data.age,
-                "male": data.male,
-                "resec": data.resec,
-                "k_score": data.k_score,
-                "methyl": data.methyl,
-                "pre_trt_history": data.pre_trt_history
-            }
-        }
-    
-    # For all other cases, use the real model (but with fallback protection)
+    # Use the trained model with calibration and fallbacks
     try:
         # Convert input to numpy array in the correct order
         input_array = np.array([[data.age, data.male, data.resec, data.k_score, data.methyl, data.pre_trt_history]])
         input_scaled = scaler.transform(input_array)
-        raw_pred = model.predict(input_array)
+        raw_pred = model.predict(input_scaled)
 
         # Handle v7 multi-output vs v6/baseline single-output
         if isinstance(raw_pred, (list, tuple)) and len(raw_pred) == 2:

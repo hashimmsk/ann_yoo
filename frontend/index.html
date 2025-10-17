@@ -378,29 +378,25 @@
       outputPlaceholder.classList.add('hidden')
       resultsContent.classList.add('hidden')
 
-      // Simulate API call for demo purposes
-      // In a real implementation, this would be an actual fetch call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Mock response for demonstration
-      const mockResponse = {
-        mPFS: Math.round(6 + (data.k_score / 10) + (data.resec / 20) - (data.age / 20) + (data.methyl / 25)),
-        PFS6: Math.round(30 + (data.k_score * 0.4) + (data.resec * 0.3) - (data.age * 0.5) + (data.methyl * 0.3)),
-        calibrated: true,
-        raw_pfs6_prob: (30 + (data.k_score * 0.4) + (data.resec * 0.3) - (data.age * 0.5) + (data.methyl * 0.3)) / 100
-      };
-      
-      // Ensure values are within reasonable bounds
-      mockResponse.mPFS = Math.max(1, Math.min(36, mockResponse.mPFS));
-      mockResponse.PFS6 = Math.max(5, Math.min(95, mockResponse.PFS6));
-      
-      const result = mockResponse;
+      const response = await fetch(`${API_BASE_URL}/predict`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
 
-      // Render numbers
-      mpfsEl.textContent = result.mPFS
-      pfs6El.textContent = `${result.PFS6}%`
+      if(!response.ok){
+        throw new Error(`API Error (${response.status})`)
+      }
 
-      // Insights & summary
+      const result = await response.json()
+
+      if(result.error){
+        throw new Error(result.error)
+      }
+
+      mpfsEl.textContent = result.mPFS ?? '-'
+      pfs6El.textContent = typeof result.PFS6 === 'number' ? `${result.PFS6}%` : `${result.PFS6}`
+
       renderInsights(data, result)
       setSummaryText(result)
       renderSurvivalChart(result)
@@ -553,20 +549,21 @@
     }
     try {
       // Simulate debug API call
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Mock debug response
-      const debugResponse = {
-        raw_predictions: { PFS6_percentage: Math.round(30 + (data.k_score * 0.4) + (data.resec * 0.3) - (data.age * 0.5) + (data.methyl * 0.3)) },
-        calibrated_predictions: { PFS6_percentage: Math.round(30 + (data.k_score * 0.4) + (data.resec * 0.3) - (data.age * 0.5) + (data.methyl * 0.3)) },
-        calibration_factors: {
-          age_group: data.age < 40 ? 'Young' : data.age < 65 ? 'Middle-aged' : 'Elderly',
-          performance_status: data.k_score < 50 ? 'Poor' : data.k_score < 80 ? 'Moderate' : 'Good',
-          resection_quality: data.resec < 50 ? 'Suboptimal' : data.resec < 90 ? 'Moderate' : 'Optimal'
-        }
-      };
-      
-      const dbg = debugResponse;
+      const response = await fetch(`${API_BASE_URL}/debug-predict`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+
+      if(!response.ok){
+        throw new Error(`API Error (${response.status})`)
+      }
+
+      const dbg = await response.json()
+
+      if(dbg.error){
+        throw new Error(dbg.error)
+      }
       const box = document.createElement('div')
       box.className = 'rounded-lg border border-amber-200/50 bg-amber-50/40 dark:bg-amber-500/10 dark:border-amber-500/30 p-4 text-sm'
       box.innerHTML = `
