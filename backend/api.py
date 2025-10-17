@@ -19,9 +19,16 @@ V7_MODEL_DIR = MODEL_DIR / "saved_models_v7a"
 LEGACY_V6_DIR = MODEL_DIR / "saved_models_v6a"
 LEGACY_BASELINE_DIR = ROOT_DIR / "saved_models"
 
+def _load_model(path: Path):
+    try:
+        return tf.keras.models.load_model(str(path), safe_mode=False)
+    except TypeError:
+        return tf.keras.models.load_model(str(path))
+
+
 try:
     # Try to load v7a model first
-    model = tf.keras.models.load_model(str(V7_MODEL_DIR / "ajdANN_v7a_model.keras"))
+    model = _load_model(V7_MODEL_DIR / "ajdANN_v7a_model.keras")
     scaler = joblib.load(str(V7_MODEL_DIR / "scaler.pkl"))
     active_version = "v7a"
     print("✅ Loaded ADJANN v7a model successfully")
@@ -29,7 +36,7 @@ except Exception as v7_error:
     print(f"⚠️  v7a model loading failed: {v7_error}")
     try:
         # Fallback to v6a
-        model = tf.keras.models.load_model(str(LEGACY_V6_DIR / "ajdANN_v6a_model.keras"))
+        model = _load_model(LEGACY_V6_DIR / "ajdANN_v6a_model.keras")
         scaler = joblib.load(str(LEGACY_V6_DIR / "scaler.pkl"))
         active_version = "v6a"
         print("✅ Loaded ADJANN v6a model as fallback")
@@ -37,7 +44,7 @@ except Exception as v7_error:
         print(f"⚠️  v6a model loading failed: {v6_error}")
         try:
             # Final fallback to baseline models
-            model = tf.keras.models.load_model(str(LEGACY_BASELINE_DIR / "baseline_model.h5"))
+            model = _load_model(LEGACY_BASELINE_DIR / "baseline_model.h5")
             scaler = joblib.load(str(LEGACY_BASELINE_DIR / "scaler.pkl"))
             active_version = "baseline"
             print("✅ Loaded baseline model as final fallback")
