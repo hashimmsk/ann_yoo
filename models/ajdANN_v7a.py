@@ -12,22 +12,47 @@ Key improvements over v6a:
 - Configurable via CLI args; saves to saved_models_v7a
 """
 
-import os
 import argparse
+import os
 import random
+
+import joblib
 import numpy as np
 import pandas as pd
-import joblib
+import tensorflow as tf
 
+from sklearn.metrics import mean_squared_error, mean_absolute_error, roc_auc_score, accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import mean_squared_error, mean_absolute_error, roc_auc_score, accuracy_score
 
-import tensorflow as tf
 from tensorflow.keras import Input, Model
-from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
+from tensorflow.keras.layers import Dense, Dropout, BatchNormalization
 from tensorflow.keras.optimizers import Adam
+
+Sequential = tf.keras.models.Sequential
+
+
+# -----------------------------
+# Custom Layers
+# -----------------------------
+
+
+# -----------------------------
+# Custom Layers
+# -----------------------------
+class TemperatureScaledSigmoid(tf.keras.layers.Layer):
+    def __init__(self, temperature: float = 2.0, **kwargs):
+        super().__init__(**kwargs)
+        self.temperature = float(temperature)
+
+    def call(self, inputs, *args, **kwargs):  # pragma: no cover - simple wrapper
+        return tf.nn.sigmoid(inputs / self.temperature)
+
+    def get_config(self):  # pragma: no cover - serialization helper
+        config = super().get_config()
+        config.update({"temperature": self.temperature})
+        return config
 
 
 # -----------------------------
@@ -74,10 +99,7 @@ def build_multitask_model(input_dim: int, learning_rate: float = 1e-3, temperatu
     
     # Apply temperature scaling to PFS6 output for better calibration
     pfs6_logits = Dense(1, activation=None, name='PFS6_logits')(x)
-    pfs6_output = tf.keras.layers.Lambda(
-        lambda x: tf.nn.sigmoid(x / temperature), 
-        name='PFS6'
-    )(pfs6_logits)
+    pfs6_output = TemperatureScaledSigmoid(temperature=temperature, name='PFS6')(pfs6_logits)
 
     model = Model(inputs=inputs, outputs=[mpfs_output, pfs6_output], name='AJDANN_v7a')
 

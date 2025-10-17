@@ -14,7 +14,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 if str(ROOT_DIR) not in sys.path:
     sys.path.append(str(ROOT_DIR))
 
-from api import app as fastapi_app
+from api import app as fastapi_app, _ensure_v7a_model
 from models import ajdANN_v7a
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
@@ -122,17 +122,16 @@ def main():
         return
     
     # Check if v7a model exists and is of good quality
-    if (MODELS_DIR / "saved_models_v7a").exists():
-        print("✅ v7a model directory exists")
-        if check_model_quality():
-            print("✅ Model quality check passed")
-        else:
-            print("⚠️  Model quality check failed - consider retraining")
-            print("💡 Run 'python retrain_v7a.py' to retrain with better calibration")
+    print("🔍 Ensuring v7a model artifacts are available...")
+    _ensure_v7a_model()
+    if check_model_quality():
+        print("✅ Model quality check passed")
     else:
-        print("📝 No v7a model found, training new model...")
-        if not train_model():
-            print("❌ Model training failed. Please check the dataset and try again.")
+        print("⚠️  Model quality check failed - auto-retraining")
+        if train_model():
+            _ensure_v7a_model(force=True)
+        else:
+            print("❌ Automatic retraining failed. Please check dataset and try again.")
             return
     
     # Start servers

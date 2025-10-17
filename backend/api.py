@@ -1,3 +1,4 @@
+import shutil
 import sys
 from pathlib import Path
 
@@ -24,20 +25,29 @@ LEGACY_V6_DIR = MODEL_DIR / "saved_models_v6a"
 LEGACY_BASELINE_DIR = ROOT_DIR / "saved_models"
 
 def _load_model(path: Path):
+    from models.ajdANN_v7a import TemperatureScaledSigmoid
+
+    custom_objects = {"TemperatureScaledSigmoid": TemperatureScaledSigmoid}
     try:
-        return tf.keras.models.load_model(str(path), safe_mode=False)
+        return tf.keras.models.load_model(str(path), custom_objects=custom_objects, safe_mode=False)
     except TypeError:
-        return tf.keras.models.load_model(str(path))
+        return tf.keras.models.load_model(str(path), custom_objects=custom_objects)
 
 
-def _ensure_v7a_model():
+def _ensure_v7a_model(force: bool = False):
     model_path = V7_MODEL_DIR / "ajdANN_v7a_model.keras"
     scaler_path = V7_MODEL_DIR / "scaler.pkl"
-    if model_path.exists() and scaler_path.exists():
+    if not force and model_path.exists() and scaler_path.exists():
         return
 
     try:
         from models import ajdANN_v7a
+
+        if force and V7_MODEL_DIR.exists():
+            backup_dir = MODEL_DIR / "saved_models_v7a_autobackup"
+            if backup_dir.exists():
+                shutil.rmtree(backup_dir)
+            shutil.move(V7_MODEL_DIR, backup_dir)
 
         dataset = ajdANN_v7a.load_dataset(str(ROOT_DIR / "backend" / "dat_hc_simul.csv"))
         ajdANN_v7a.set_seeds()
@@ -63,23 +73,32 @@ try:
 except Exception as v7_error:
     print(f"⚠️  v7a model loading failed: {v7_error}")
     try:
-        # Fallback to v6a
-        model = _load_model(LEGACY_V6_DIR / "ajdANN_v6a_model.keras")
-        scaler = joblib.load(str(LEGACY_V6_DIR / "scaler.pkl"))
-        active_version = "v6a"
-        print("✅ Loaded ADJANN v6a model as fallback")
-    except Exception as v6_error:
-        print(f"⚠️  v6a model loading failed: {v6_error}")
+        print("🔄 Attempting to retrain v7a model automatically...")
+        _ensure_v7a_model(force=True)
+        model = _load_model(V7_MODEL_DIR / "ajdANN_v7a_model.keras")
+        scaler = joblib.load(str(V7_MODEL_DIR / "scaler.pkl"))
+        active_version = "v7a"
+        print("✅ Retrained and loaded ADJANN v7a model")
+    except Exception as retrain_error:
+        print(f"❌ Auto-retrain failed: {retrain_error}")
         try:
-            # Final fallback to baseline models
-            model = _load_model(LEGACY_BASELINE_DIR / "baseline_model.h5")
-            scaler = joblib.load(str(LEGACY_BASELINE_DIR / "scaler.pkl"))
-            active_version = "baseline"
-            print("✅ Loaded baseline model as final fallback")
-        except Exception as baseline_error:
-            print(f"❌ All model loading attempts failed: {baseline_error}")
-            model = None
-            scaler = None
+            # Fallback to v6a
+            model = _load_model(LEGACY_V6_DIR / "ajdANN_v6a_model.keras")
+            scaler = joblib.load(str(LEGACY_V6_DIR / "scaler.pkl"))
+            active_version = "v6a"
+            print("✅ Loaded ADJANN v6a model as fallback")
+        except Exception as v6_error:
+            print(f"⚠️  v6a model loading failed: {v6_error}")
+            try:
+                # Final fallback to baseline models
+                model = _load_model(LEGACY_BASELINE_DIR / "baseline_model.h5")
+                scaler = joblib.load(str(LEGACY_BASELINE_DIR / "scaler.pkl"))
+                active_version = "baseline"
+                print("✅ Loaded baseline model as final fallback")
+            except Exception as baseline_error:
+                print(f"❌ All model loading attempts failed: {baseline_error}")
+                model = None
+                scaler = None
 
 def calibrate_pfs6_probability(raw_prob, input_data):
     """
