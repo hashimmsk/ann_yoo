@@ -1,8 +1,10 @@
+import sys
+from pathlib import Path
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pathlib import Path
 import numpy as np
 import joblib
 import tensorflow as tf
@@ -14,6 +16,8 @@ scaler = None
 active_version = "unknown"
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.append(str(ROOT_DIR))
 MODEL_DIR = ROOT_DIR / "models"
 V7_MODEL_DIR = MODEL_DIR / "saved_models_v7a"
 LEGACY_V6_DIR = MODEL_DIR / "saved_models_v6a"
@@ -24,6 +28,30 @@ def _load_model(path: Path):
         return tf.keras.models.load_model(str(path), safe_mode=False)
     except TypeError:
         return tf.keras.models.load_model(str(path))
+
+
+def _ensure_v7a_model():
+    model_path = V7_MODEL_DIR / "ajdANN_v7a_model.keras"
+    scaler_path = V7_MODEL_DIR / "scaler.pkl"
+    if model_path.exists() and scaler_path.exists():
+        return
+
+    try:
+        from models import ajdANN_v7a
+
+        dataset = ajdANN_v7a.load_dataset(str(ROOT_DIR / "backend" / "dat_hc_simul.csv"))
+        ajdANN_v7a.set_seeds()
+        ajdANN_v7a.train_and_evaluate(
+            data=dataset,
+            output_dir=str(V7_MODEL_DIR),
+            temperature=2.0,
+        )
+        print("✅ Trained fresh v7a model because artifacts were missing")
+    except Exception as train_error:
+        print(f"❌ Auto-training v7a model failed: {train_error}")
+
+
+_ensure_v7a_model()
 
 
 try:
