@@ -22,7 +22,7 @@ except ImportError:
     TABULATE_AVAILABLE = False
 
 
-DEFAULT_EXPORT_PATH = Path("generated_report.txt")
+DEFAULT_EXPORT_PATH = Path(__file__).resolve().parent / "report.txt"
 HEADING_RULE = "-" * 16
 
 
