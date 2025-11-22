@@ -8,7 +8,7 @@ This repository packages the datanuri (ADJANN v7a) research stack used by Dr. Yo
 - FastAPI backend (`backend/api.py`) that loads v7a artifacts, applies clinical calibration heuristics, and falls back to legacy or heuristic estimates when needed.
 - Flask wrapper (`backend/start_app.py`) that serves the static frontend along with the API for a cohesive local experience.
 - Responsive frontend (`frontend/index.html`) built with Tailwind and Chart.js for clinician-friendly inputs and visualizations.
-- Offline report generator (`generate_report.py`) that exports the current method/results narrative for publications or handouts.
+- Offline report generators in `reports/` (`v1/generate_report.py` for the technical narrative and `v3/generate_report.py` for a plain-language summary).
 
 ## Repository Layout
 ```text
@@ -26,8 +26,13 @@ This repository packages the datanuri (ADJANN v7a) research stack used by Dr. Yo
 ├── models/                  # Model code and saved artifacts
 │   ├── ajdANN_v7a.py        # Training pipeline + model definition
 │   └── saved_models_v7a/    # Default trained weights and scaler
-├── generate_report.py       # Builds text summary of methods/results
-├── generated_report.txt     # Example export from the report script
+├── reports/
+│   ├── v1/
+│   │   ├── generate_report.py  # Technical methods/results script
+│   │   └── report.txt          # Sample export (technical language)
+│   └── v3/
+│       ├── generate_report.py  # Plain-language story generator
+│       └── report.txt          # Sample export (everyday language)
 ├── requirements.txt         # Delegates to backend requirements
 └── rct_data/                # (If present) supplemental trial data
 ```
@@ -106,10 +111,11 @@ Interactive docs are available at `http://localhost:8000/docs` when running via 
 
 ## Reporting Workflow
 - Generate a refreshed narrative with:
-  ```powershell
-  python generate_report.py --output generated_report.txt
-  ```
-- The script prints the report and writes the same content to the target file (default `generated_report.txt`).
+```powershell
+python reports/v1/generate_report.py --output reports/v1/report.txt
+python reports/v3/generate_report.py --output reports/v3/report.txt
+```
+- Each script prints its narrative and writes the same content to the chosen file (defaults shown above).
 
 ## Troubleshooting
 - **Missing dependencies** – Rerun `pip install -r requirements.txt`. `start_app.py` surfaces missing packages.
