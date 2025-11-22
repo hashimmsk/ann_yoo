@@ -1,0 +1,52 @@
+What This Tool Does
+------------------------
+datanuri reads information from past brain cancer trials and gives two friendly answers: how many
+months someone like the patient usually stays stable, and the chance they are still doing well after
+six months. The goal is to give doctors and families a quick, grounded snapshot that supports their
+own judgement.
+
+To teach the program, we fed it the cleaned research spreadsheet, asked it not to look at columns
+that only describe the studies, and saved age, sex, surgery success, daily activity scores, lab
+signals, and treatment history. It practices on most of the rows and we check its answers on the
+remaining rows it has never seen.
+
+How We Checked It
+------------------------
+The program repeats its study until the answers stop improving. Along the way we slow the learning
+if it races ahead, and we keep the best checkpoint. If the main program ever fails to load, older
+backups and even simple look-up rules step in so that the service still responds.
+
+How Well It Performed
+------------------------
+After practice the program faced a saved slice of trial records. The table shows how far each
+approach usually missed the real answer by (in months) and how often it correctly spotted a patient
+still doing well at the six-month mark.
+
+Program              Average miss (months) Confidence score (0–1) Six-month calls correct (%)
+     datanuri (v7a) 0.72                   0.93                   90                         
+Straight-line guess 0.77                                                                     
+ Gentle slope guess 1.08                                                                     
+    Decision forest 1.06                                                                     
+(Install 'tabulate' for friendlier table borders: pip install tabulate)
+
+In short, datanuri offered the smallest average miss and is the only option above that still shares
+a confidence number for the six-month question.
+
+Sample Stories
+------------------------
+Below are three example patients. For each one we list the real time they remained steady, what
+datanuri guessed, and how that compares with a more traditional approach.
+
+Patient    Real months stable  datanuri guess  Traditional guess  Chance of six-month wellness (%)
+Example 1 1.90                1.94            2.07               38                               
+Example 2 4.20                4.28            4.64               68                               
+Example 3 7.30                7.02            9.01               80                               
+
+The final column shows the chance, expressed as a percentage, that each person is still doing well
+at six months. If the main program cannot supply the number, we fall back to a cautious estimate so
+no one is left without guidance.
+
+Takeaway
+------------------------
+datanuri brings the careful math into a plain-language summary. It gives a quick, calm starting
+point for conversations, while doctors continue to make the final call.
