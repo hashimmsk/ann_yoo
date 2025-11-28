@@ -230,11 +230,77 @@ def build_validation_section() -> str:
     return "\n".join(lines)
 
 
+def build_code_evaluation_section() -> str:
+    lines: list[str] = []
+    lines.append("Code Evaluation & Pipeline Walkthrough")
+    lines.append(HEADING_RULE)
+    sections = [
+        (
+            "1. Data Curation & Ingestion",
+            "The pipeline starts by loading the curated single-arm trial dataset from "
+            "`backend/dat_hc_simul.csv`. Metadata columns such as source identifiers or sample counts "
+            "are dropped so the feature set focuses on patient descriptors (age, sex, resection rate, "
+            "Karnofsky score, methylation, treatment history). The loader validates the presence of the "
+            "target columns (`mPFS`, `PFS6`) before proceeding."
+        ),
+        (
+            "2. Train / Validation Split with Stratification",
+            "Using `train_test_split`, we reserve 20% of the rows as a holdout validation set. When PFS6 "
+            "is presented as a class label, the split is stratified to maintain the event-rate balance. "
+            "This guards against leakage and ensures metrics reflect generalisation."
+        ),
+        (
+            "3. Feature Scaling",
+            "A `StandardScaler` is fit on the training features only, then applied to training and "
+            "validation matrices. Persisting the scaler (`scaler.pkl`) keeps inference consistent with "
+            "training and minimises drift when new data arrives."
+        ),
+        (
+            "4. Multitask Network Architecture",
+            "The shared trunk comprises stacked dense layers with ReLU activations, batch normalisation, "
+            "and dropout to manage overfitting. Two heads branch off: a linear unit for mPFS regression "
+            "and a temperature-scaled sigmoid for PFS6 classification, letting the model learn shared "
+            "representations while respecting each objective."
+        ),
+        (
+            "5. Supervision, Calibration, and Checkpoints",
+            "Training leverages balanced loss weights between the regression and classification heads. "
+            "Callbacks (`EarlyStopping`, `ReduceLROnPlateau`, `ModelCheckpoint`) stabilise optimisation, "
+            "storing the best weights as `ajdANN_v7a_best.keras`. Post-training, temperature scaling tempers "
+            "the PFS6 probabilities to avoid overconfident predictions."
+        ),
+        (
+            "6. Validation & Reporting",
+            "After training, the model is evaluated on the validation slice. RMSE/MAE quantify mPFS accuracy "
+            "while AUC/accuracy capture PFS6 discrimination. Summary tables and sample-case diagnostics are "
+            "rendered directly in this report, providing traceability for the published metrics."
+        ),
+        (
+            "7. Serving & Fallbacks",
+            "The FastAPI service loads the saved model and scaler, applies clinical calibration heuristics, "
+            "and exposes `/predict` and `/debug-predict` endpoints. If loading fails, the system attempts to "
+            "retrain or drop back to legacy weights or heuristic estimates, ensuring continuity of service."
+        ),
+    ]
+    for title, paragraph in sections:
+        lines.append(title)
+        lines.append("")
+        lines.append(textwrap.fill(paragraph, width=100))
+        lines.append("")
+    return "\n".join(lines)
+
+
 def build_report() -> str:
     method_section = build_method_logic_section()
     results_section = build_results_section()
+    code_eval_section = build_code_evaluation_section()
     validation_section = build_validation_section()
-    return f"{method_section}\n{results_section}\n{validation_section}"
+    return (
+        f"{method_section}\n"
+        f"{results_section}\n"
+        f"{code_eval_section}\n"
+        f"{validation_section}"
+    )
 
 
 def parse_args() -> argparse.Namespace:

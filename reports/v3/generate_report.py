@@ -208,6 +208,62 @@ def build_sample_cases_section() -> str:
     return "\n".join(lines)
 
 
+def build_code_evaluation_section() -> str:
+    lines: list[str] = []
+    lines.append("How the Code Builds the Answers")
+    lines.append(HEADING_RULE)
+    steps = [
+        (
+            "1. Gather and tidy the data",
+            "We start by opening the cleaned trial spreadsheet. Columns that only describe the study "
+            "are removed. We keep the details that describe the person: age, sex, surgery success, daily "
+            "activity score, lab signal, and treatment history. We also make sure the two goal columns "
+            "we care about are present."
+        ),
+        (
+            "2. Set aside a fair test",
+            "Most rows are used for practice, while a smaller slice is hidden away for checking later. "
+            "When the yes/no six-month result is available, we shuffle the rows in a way that keeps the "
+            "same balance of successes in both piles so the check feels fair."
+        ),
+        (
+            "3. Put numbers on the same scale",
+            "Some features are big numbers, some are small. We teach the program to centre and scale the "
+            "inputs using only the practice rows, and we reuse the same scaler later so the service speaks "
+            "the same language as the training run."
+        ),
+        (
+            "4. Teach the brain",
+            "The model itself is a stack of layers that share information, then split into two heads. "
+            "One head guesses months, the other gives the six-month chance. Dropout and other guard rails "
+            "keep the network from memorising instead of learning."
+        ),
+        (
+            "5. Keep the best version",
+            "During training we nudge the learning rate, stop early if progress stalls, and only save the "
+            "best checkpoint. A temperature control keeps the six-month confidence number calm and realistic."
+        ),
+        (
+            "6. Check the work",
+            "After training we run the model on the saved-away slice. We measure how many months off the "
+            "guess was on average and how often it called the six-month outcome right. The tables in this "
+            "report are generated from those numbers."
+        ),
+        (
+            "7. Share the answers safely",
+            "When the service runs, it loads the saved model and scaler, applies a small clinical adjustment "
+            "to the six-month chance, and serves the `/predict` and `/debug-predict` endpoints. If something "
+            "goes wrong, older checkpoints or simple fallbacks step in so the user still gets guidance."
+        ),
+    ]
+    for title, paragraph in steps:
+        lines.append(title)
+        lines.append("")
+        lines.append(_wrap(paragraph))
+        lines.append("")
+    return "\n".join(lines)
+
+
 def build_closing_section() -> str:
     lines: list[str] = []
     lines.append("Takeaway")
@@ -227,6 +283,7 @@ def build_report() -> str:
         build_intro_section(),
         build_quality_checks_section(),
         build_results_section(),
+        build_code_evaluation_section(),
         build_sample_cases_section(),
         build_closing_section(),
     ]
